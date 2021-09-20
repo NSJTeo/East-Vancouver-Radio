@@ -80,9 +80,14 @@ server.get("/controls/getPlaylist", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "./example.html"));
 // });
 
-// schedule.scheduleJob("*/2 * * * * *", () => {
-//   station.next();
-// });
+const hourlyChange = new schedule.RecurrenceRule();
+hourlyChange.minute = 0;
+schedule.scheduleJob(hourlyChange, () => {
+  station.next();
+  console.log("scheduled change");
+});
+
+// schedule files changes
 
 server.listen(port, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
