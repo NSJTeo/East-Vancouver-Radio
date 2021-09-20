@@ -5,7 +5,7 @@ const {
   SHUFFLE_METHODS,
   PUBLIC_EVENTS,
 } = require("@fridgefm/radio-core");
-const port = 3001;
+const port = 8080;
 const server = express();
 const musicPath = "./music";
 const schedule = require("node-schedule");
@@ -80,9 +80,9 @@ server.get("/controls/getPlaylist", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "./example.html"));
 // });
 
-schedule.scheduleJob("*/2 * * * * *", () => {
-  station.next();
-});
+// schedule.scheduleJob("*/2 * * * * *", () => {
+//   station.next();
+// });
 
 server.listen(port, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);

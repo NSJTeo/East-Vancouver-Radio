@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import Player from "./Components/Player/Player";
 
 function App() {
