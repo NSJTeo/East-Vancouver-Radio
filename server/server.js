@@ -1,3 +1,4 @@
+// module imports
 const express = require("express");
 const path = require("path");
 const {
@@ -5,62 +6,74 @@ const {
   SHUFFLE_METHODS,
   PUBLIC_EVENTS,
 } = require("@fridgefm/radio-core");
-const port = 8080;
-const secondPort = 8081;
-const firstServer = express();
-const secondServer = express();
-const musicPath = "./music";
 const schedule = require("node-schedule");
 const cors = require("cors");
+
+// express setup
+const firstServer = express();
+const secondServer = express();
+
+// constants
+const port = 8080;
+const secondPort = 8081;
+const musicPath = "./music";
+
+// socket setup
 const io = require("socket.io")(3001, {
   cors: {
     origin: "*",
   },
 });
-// const chatRouter = require("./routes/chat");
 const fs = require("fs");
 
 io.on("connection", (socket) => {
-  // socket.emit("chat-message", "Hello World");
   socket.on("send-chat-message", (message) => {
     console.log(message);
     socket.broadcast.emit("chat-message", message);
   });
 });
 
+// middleware
 secondServer.use(express.json());
 secondServer.use(cors({ origin: "*" }));
 secondServer.use(express.static("public"));
-// secondServer.use("/chat", chatRouter);
 
-secondServer.get("/chat", (_req, res) => {
-  console.log("get");
-  const chat = fs.readFileSync("./data/chat.json");
-  const parsedChat = JSON.parse(chat);
-  console.log(parsedChat);
-  res.json(parsedChat);
-});
+// chat endpoints
+secondServer
+  .get("/chat", (_req, res) => {
+    console.log("get");
+    const chat = fs.readFileSync("./data/chat.json");
+    const parsedChat = JSON.parse(chat);
+    console.log(parsedChat);
+    res.json(parsedChat);
+  })
+  .post("/chat", (req, res) => {
+    console.log("req.body", req.body.body);
+    const commentDate = new Date();
+    const newMessage = {
+      id: commentDate.getMilliseconds(),
+      body: req.body.body,
+    };
+    const chat = fs.readFileSync("./data/chat.json");
+    const parsedChat = JSON.parse(chat);
+    parsedChat.push(newMessage);
+    fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
+    res.status(200).json({ Success: true });
+  });
 
 const station = new Station({
-  verbose: true, // for verbose logging to console
-  // responseHeaders: {
-  //   "icy-genre": "jazz",
-  // },
+  verbose: true,
 });
 // add folder to station
 station.addFolder(musicPath);
 
 // update currently playing track info
+// could use a socket here to send information to client
 let currentTrack;
 station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   currentTrack = result;
 });
-
-// station.on(PUBLIC_EVENTS.START, () => {
-// double the playlist on start
-//   station.reorderPlaylist((a) => a.concat(a));
-// });
 
 // station.on(PUBLIC_EVENTS.RESTART, () => {
 //   station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
@@ -119,6 +132,8 @@ schedule.scheduleJob(hourlyChange, () => {
 });
 
 // schedule files changes
+// schedule comment delete
+// utils schedule folder?
 
 firstServer.listen(port, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);

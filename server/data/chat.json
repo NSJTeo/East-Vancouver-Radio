@@ -1,8 +1,1 @@
-[
-  {
-    "message": "test1"
-  },
-  {
-    "message": "test2"
-  }
-]
+[{"body":"test1","id":1},{"body":"test2","id":2},{"id":345,"body":"test3"},{"id":653,"body":"test4"},{"id":524,"body":"hello here is my comment"}]
