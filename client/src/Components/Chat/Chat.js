@@ -1,6 +1,7 @@
 import React, { createRef, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
+import ChatMessage from "../ChatMessage/ChatMessage";
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -50,9 +51,11 @@ export default function Chat() {
 
   return (
     <>
-      {messages.map((message) => (
-        <p key={message.id}>{message.body}</p>
-      ))}
+      <ol>
+        {messages.map((message) => (
+          <ChatMessage key={message.id} {...message} />
+        ))}
+      </ol>
       {username ? (
         <form ref={formRef}>
           <input name="message" />
