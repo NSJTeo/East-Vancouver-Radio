@@ -19,7 +19,7 @@ const port = 8080;
 const secondPort = 8081;
 const musicPath = "./music";
 
-// socket setup
+// chat socket setup
 const io = require("socket.io")(3001, {
   cors: {
     origin: "*",
@@ -29,7 +29,6 @@ const fs = require("fs");
 
 io.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
-    console.log(message);
     socket.broadcast.emit("chat-message", message);
   });
 });
@@ -42,14 +41,11 @@ secondServer.use(express.static("public"));
 // chat endpoints
 secondServer
   .get("/chat", (_req, res) => {
-    console.log("get");
     const chat = fs.readFileSync("./data/chat.json");
     const parsedChat = JSON.parse(chat);
-    console.log(parsedChat);
     res.json(parsedChat);
   })
   .post("/chat", (req, res) => {
-    console.log("req.body", req.body.body);
     const commentDate = new Date();
     const newMessage = {
       name: req.body.name,
@@ -67,6 +63,7 @@ secondServer
 const station = new Station({
   verbose: true,
 });
+
 // add folder to station
 station.addFolder(musicPath);
 
@@ -90,41 +87,10 @@ firstServer.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
 
-// get id3 tags of the track
-// server.get("/info", (req, res) => {
-//   res.json(currentTrack);
-// });
-
-// switch to the next track immediately
-// server.get("/controls/next", (req, res) => {
-//   station.next();
-//   res.json("Switched to next track");
-// });
-
-// shuffle playlist
-// server.get("/controls/shufflePlaylist", (req, res) => {
-//   station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
-//   res.json("Playlist shuffled");
-// });
-
-// rearrange tracks in a playlist
-// server.get("/controls/rearrangePlaylist", (req, res) => {
-//   const { newIndex, oldIndex } = req.query;
-//   station.reorderPlaylist(
-//     SHUFFLE_METHODS.rearrange({ from: oldIndex, to: newIndex })
-//   );
-//   res.json(`Succesfully moved element from "${oldIndex}" to "${newIndex}"`);
-// });
-
 // just get the entire playlist
 // server.get("/controls/getPlaylist", (req, res) => {
 //   const plist = station.getPlaylist();
 //   res.json(plist);
-// });
-
-// route for serving static
-// server.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "./example.html"));
 // });
 
 const hourlyChange = new schedule.RecurrenceRule();
@@ -136,6 +102,12 @@ schedule.scheduleJob(hourlyChange, () => {
 
 // schedule files changes
 // schedule comment delete
+schedule.scheduleJob(hourlyChange, () => {
+  console.log("delete 6hr old comments");
+  const currentTime = new Date();
+  const currentTimestamp = currentTime.getTime();
+  // how many milliseconds in 6 hours?
+});
 // utils schedule folder?
 
 firstServer.listen(port, () => {

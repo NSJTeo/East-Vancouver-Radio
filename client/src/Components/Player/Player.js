@@ -1,9 +1,11 @@
 import React, { useState, createRef } from "react";
 
-export default function Player() {
+export default function Player(props) {
   const [muted, setMuted] = useState(false);
   const [play, setPlay] = useState(true);
   const playerRef = createRef();
+  const { playerOn } = props;
+  console.log(playerOn);
 
   const toggleMute = () => {
     setMuted(!muted);
@@ -16,7 +18,11 @@ export default function Player() {
   };
 
   return (
-    <>
+    <div
+      className={`player__container ${
+        playerOn ? "" : "player__container--hidden"
+      }`}
+    >
       {muted ? <p>Muted</p> : null}
       <audio
         ref={playerRef}
@@ -34,6 +40,6 @@ export default function Player() {
           Start Listening
         </button>
       ) : null}
-    </>
+    </div>
   );
 }

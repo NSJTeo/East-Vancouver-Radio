@@ -3,14 +3,18 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import ChatMessage from "../ChatMessage/ChatMessage";
 
-export default function Chat() {
+export default function Chat(props) {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(null);
 
+  const { chatOn } = props;
+  console.log(chatOn);
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
       console.log("response data", response.data);
-      setMessages(response.data);
+      // sort messages by timestamp
+      const messagesArray = response.data;
+      setMessages(messagesArray);
     });
   };
 
@@ -50,12 +54,14 @@ export default function Chat() {
   };
 
   return (
-    <>
-      <ol>
+    <div
+      className={`chat__container ${chatOn ? "" : "chat__container--hidden"}`}
+    >
+      <section>
         {messages.map((message) => (
           <ChatMessage key={message.id} {...message} />
         ))}
-      </ol>
+      </section>
       {username ? (
         <form ref={formRef}>
           <input name="message" />
@@ -71,7 +77,11 @@ export default function Chat() {
           </button>
         </form>
       )}
-      {username && <p>Logged in as: {username}</p>}
-    </>
+      {username ? (
+        <p>Logged in as: {username}</p>
+      ) : (
+        <p>Please select username</p>
+      )}
+    </div>
   );
 }
