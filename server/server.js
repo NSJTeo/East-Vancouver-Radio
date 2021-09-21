@@ -6,7 +6,9 @@ const {
   PUBLIC_EVENTS,
 } = require("@fridgefm/radio-core");
 const port = 8080;
-const server = express();
+const secondPort = 8081;
+const firstServer = express();
+const secondServer = express();
 const musicPath = "./music";
 const schedule = require("node-schedule");
 const cors = require("cors");
@@ -15,6 +17,8 @@ const io = require("socket.io")(3001, {
     origin: "*",
   },
 });
+// const chatRouter = require("./routes/chat");
+const fs = require("fs");
 
 io.on("connection", (socket) => {
   // socket.emit("chat-message", "Hello World");
@@ -24,9 +28,18 @@ io.on("connection", (socket) => {
   });
 });
 
-server.use(express.json());
-server.use(cors({ origin: "*" }));
-server.use(express.static("public"));
+secondServer.use(express.json());
+secondServer.use(cors({ origin: "*" }));
+secondServer.use(express.static("public"));
+// secondServer.use("/chat", chatRouter);
+
+secondServer.get("/chat", (_req, res) => {
+  console.log("get");
+  const chat = fs.readFileSync("./data/chat.json");
+  const parsedChat = JSON.parse(chat);
+  console.log(parsedChat);
+  res.json(parsedChat);
+});
 
 const station = new Station({
   verbose: true, // for verbose logging to console
@@ -57,7 +70,7 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
 station.on(PUBLIC_EVENTS.ERROR, console.error);
 
 // main stream route
-server.get("/stream", (req, res) => {
+firstServer.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
 
@@ -88,10 +101,10 @@ server.get("/stream", (req, res) => {
 // });
 
 // just get the entire playlist
-server.get("/controls/getPlaylist", (req, res) => {
-  const plist = station.getPlaylist();
-  res.json(plist);
-});
+// server.get("/controls/getPlaylist", (req, res) => {
+//   const plist = station.getPlaylist();
+//   res.json(plist);
+// });
 
 // route for serving static
 // server.get("*", (req, res) => {
@@ -107,7 +120,11 @@ schedule.scheduleJob(hourlyChange, () => {
 
 // schedule files changes
 
-server.listen(port, () => {
+firstServer.listen(port, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
   station.start();
+});
+
+secondServer.listen(secondPort, () => {
+  console.log("second server is listening");
 });
