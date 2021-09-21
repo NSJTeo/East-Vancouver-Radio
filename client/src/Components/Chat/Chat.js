@@ -15,6 +15,7 @@ export default function Chat() {
 
   useEffect(() => {
     getChatMessages();
+    // get username from session storage
   }, []);
 
   const socket = io("http://localhost:3001");
@@ -30,7 +31,7 @@ export default function Chat() {
     const form = formRef.current;
     socket.emit("send-chat-message", form.message.value);
     const newMessage = {
-      name: "test user",
+      name: username,
       body: form.message.value,
     };
 
@@ -67,12 +68,7 @@ export default function Chat() {
           </button>
         </form>
       )}
-      {/* <form ref={formRef}>
-        <input name="message" />
-        <button type="button" onClick={handleClick}>
-          Submit
-        </button>
-      </form> */}
+      {username && <p>Logged in as: {username}</p>}
     </>
   );
 }
