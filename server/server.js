@@ -9,6 +9,20 @@ const port = 8080;
 const server = express();
 const musicPath = "./music";
 const schedule = require("node-schedule");
+const cors = require("cors");
+const io = require("socket.io")(3001, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.emit("chat-message", "Hello World");
+});
+
+server.use(express.json());
+server.use(cors({ origin: "*" }));
+server.use(express.static("public"));
 
 const station = new Station({
   verbose: true, // for verbose logging to console
