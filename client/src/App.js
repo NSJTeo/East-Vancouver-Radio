@@ -26,7 +26,7 @@ function App() {
         <p>Chat</p>
       </button>
       <Player playerOn={playerOn} />
-      <Chat chatOn={chatOn} />
+      <Chat chatOn={chatOn} handleChatIconClick={handleChatIconClick} />
     </>
   );
 }

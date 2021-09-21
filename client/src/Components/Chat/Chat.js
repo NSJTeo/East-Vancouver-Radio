@@ -2,12 +2,13 @@ import React, { createRef, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 import ChatMessage from "../ChatMessage/ChatMessage";
+import closeIcon from "../../assets/icons/close-icon.png";
 
 export default function Chat(props) {
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(null);
 
-  const { chatOn } = props;
+  const { chatOn, handleChatIconClick } = props;
   console.log(chatOn);
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
@@ -57,31 +58,47 @@ export default function Chat(props) {
     <div
       className={`chat__container ${chatOn ? "" : "chat__container--hidden"}`}
     >
-      <section>
+      <div className="chat__header">
+        <p className="chat__header-title">Chat!</p>
+        <button className="chat__close-button">
+          <img src={closeIcon} onClick={() => handleChatIconClick()} />
+        </button>
+      </div>
+      <section className="chat__window">
         {messages.map((message) => (
           <ChatMessage key={message.id} {...message} />
         ))}
       </section>
-      {username ? (
-        <form ref={formRef}>
-          <input name="message" />
-          <button type="button" onClick={handleClick}>
-            Submit
-          </button>
-        </form>
-      ) : (
-        <form ref={userRef}>
-          <input name="username" />
-          <button type="button" onClick={handleUsername}>
-            Set Username
-          </button>
-        </form>
-      )}
-      {username ? (
-        <p>Logged in as: {username}</p>
-      ) : (
-        <p>Please select username</p>
-      )}
+      <div className="chat__message-container">
+        {username ? (
+          <form ref={formRef}>
+            <input className="chat__input" name="message" />
+            <button
+              className="chat__button"
+              type="button"
+              onClick={handleClick}
+            >
+              Submit
+            </button>
+          </form>
+        ) : (
+          <form ref={userRef}>
+            <input className="chat__input" name="username" />
+            <button
+              className="chat__button"
+              type="button"
+              onClick={handleUsername}
+            >
+              Set Username
+            </button>
+          </form>
+        )}
+        {username ? (
+          <p>Logged in as: {username}</p>
+        ) : (
+          <p>Please select username</p>
+        )}
+      </div>
     </div>
   );
 }
