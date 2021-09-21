@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
+  const [username, setUsername] = useState(null);
 
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
@@ -23,6 +24,7 @@ export default function Chat() {
   });
 
   const formRef = createRef();
+  const userRef = createRef();
 
   const handleClick = () => {
     const form = formRef.current;
@@ -39,17 +41,38 @@ export default function Chat() {
     });
   };
 
+  const handleUsername = () => {
+    const username = userRef.current.username.value;
+    setUsername(username);
+    userRef.current.reset();
+  };
+
   return (
     <>
       {messages.map((message) => (
         <p key={message.id}>{message.body}</p>
       ))}
-      <form ref={formRef}>
+      {username ? (
+        <form ref={formRef}>
+          <input name="message" />
+          <button type="button" onClick={handleClick}>
+            Submit
+          </button>
+        </form>
+      ) : (
+        <form ref={userRef}>
+          <input name="username" />
+          <button type="button" onClick={handleUsername}>
+            Set Username
+          </button>
+        </form>
+      )}
+      {/* <form ref={formRef}>
         <input name="message" />
         <button type="button" onClick={handleClick}>
           Submit
         </button>
-      </form>
+      </form> */}
     </>
   );
 }
