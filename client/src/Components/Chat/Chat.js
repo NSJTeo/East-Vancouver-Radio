@@ -36,6 +36,9 @@ export default function Chat(props) {
 
   const handleClick = () => {
     const form = formRef.current;
+    if (!form.message.value.trim()) {
+      return;
+    }
     socket.emit("send-chat-message", form.message.value);
     const newMessage = {
       name: username,
@@ -50,7 +53,10 @@ export default function Chat(props) {
   };
 
   const handleUsername = () => {
-    const username = userRef.current.username.value;
+    const username = userRef.current.username.value.trim();
+    if (!username) {
+      return;
+    }
     setUsername(username);
     userRef.current.reset();
   };
@@ -65,7 +71,12 @@ export default function Chat(props) {
         className={`chat__container ${chatOn ? "" : "chat__container--hidden"}`}
       >
         <div className="chat__header">
-          <p className="chat__header-title">Chat!</p>
+          {username ? (
+            <p className="chat__header-title">{username}</p>
+          ) : (
+            <p className="chat__header-title">Instant Message</p>
+          )}
+          {/* <div className="chat__header-title">Instant Message</div> */}
           <div className="chat__header-grabbable"></div>
           <button className="chat__close-button">
             <img src={closeIcon} onClick={() => handleChatIconClick()} />
@@ -78,21 +89,26 @@ export default function Chat(props) {
         </section>
         <div className="chat__message-container">
           {username ? (
-            <form ref={formRef}>
-              <input className="chat__input" name="message" />
+            <form ref={formRef} className="chat__form">
+              <textarea className="chat__message-input" name="message" />
               <button
-                className="chat__button"
+                className="chat__message-input-button"
                 type="button"
                 onClick={handleClick}
               >
-                Submit
+                <p>Send</p>
               </button>
             </form>
           ) : (
-            <form ref={userRef}>
-              <input className="chat__input" name="username" />
+            <form ref={userRef} className="chat__form">
+              <input
+                className="chat__username-input"
+                name="username"
+                placeholder="Select username"
+                autoComplete="off"
+              />
               <button
-                className="chat__button"
+                className="chat__username-input-button"
                 type="button"
                 onClick={handleUsername}
               >
@@ -100,11 +116,11 @@ export default function Chat(props) {
               </button>
             </form>
           )}
-          {username ? (
+          {/* {username ? (
             <p>Logged in as: {username}</p>
           ) : (
             <p>Please select username</p>
-          )}
+          )} */}
         </div>
       </div>
     </Draggable>

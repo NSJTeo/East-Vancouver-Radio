@@ -6,6 +6,7 @@
     border-left: 2px solid #efefef;
     border-right: 2px solid #000;
     border-bottom: 2px solid #000;
+    padding: 0.15rem;
     &--hidden {
       display: none;
     }
@@ -17,10 +18,6 @@
     padding: 0 0.25rem;
     height: 1.5rem;
     line-height: 1.4;
-    border-top: 1px solid silver;
-    border-left: 1px solid silver;
-    border-right: 2px solid silver;
-    border-bottom: 1px solid silver;
     background: navy;
   }
   &__header-title {
@@ -60,29 +57,63 @@
     border-bottom: 2px solid #f4f4f4;
     padding: 0rem 0.25rem;
   }
-  &__input {
+  &__form {
+    display: flex;
+  }
+  &__username-input {
     border-left: 2px solid #404040;
     border-top: 2px solid #404040;
     border-right: 2px solid #f4f4f4;
     border-bottom: 2px solid #f4f4f4;
     margin-right: 0.5rem;
+    flex-grow: 1;
   }
-  &__button {
-    border-left: 2px solid #ededed;
-    border-top: 2px solid #ededed;
+  &__username-input-button {
+    background: none;
+    padding: 0.25rem;
+    border-left: 1px solid #ededed;
+    border-top: 1px solid #ededed;
     border-right: 2px solid #404040;
     border-bottom: 2px solid #404040;
+    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
     &:hover {
       cursor: pointer;
     }
     &:active {
-      border-right: 2px solid #ededed;
-      border-bottom: 2px solid #ededed;
+      border-right: 1px solid #ededed;
+      border-bottom: 1px solid #ededed;
+      border-left: 2px solid #404040;
+      border-top: 2px solid #404040;
+    }
+  }
+  &__message-input {
+    border-left: 2px solid #404040;
+    border-top: 2px solid #404040;
+    border-right: 2px solid #f4f4f4;
+    border-bottom: 2px solid #f4f4f4;
+    margin-right: 0.5rem;
+    resize: none;
+    flex-grow: 1;
+  }
+  &__message-input-button {
+    background: none;
+    padding: 1rem;
+    border-left: 1px solid #ededed;
+    border-top: 1px solid #ededed;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      border-right: 1px solid #ededed;
+      border-bottom: 1px solid #ededed;
       border-left: 2px solid #404040;
       border-top: 2px solid #404040;
     }
   }
   &__message-container {
-    padding: 0.25rem;
+    padding: 0.5rem 0.25rem;
   }
 }

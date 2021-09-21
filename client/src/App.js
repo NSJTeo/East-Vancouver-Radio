@@ -3,7 +3,7 @@ import Chat from "./Components/Chat/Chat";
 import Player from "./Components/Player/Player";
 import { useState } from "react";
 import playerIcon from "./assets/icons/wm-5.png";
-import chatIcon from "./assets/icons/users-2.png";
+import chatIcon from "./assets/icons/chat-icon2.png";
 import Taskbar from "./Components/Taskbar/Taskbar";
 
 function App() {

@@ -1,6 +1,6 @@
 import React from "react";
 import playerIcon from "../../assets/icons/wm-5.png";
-import chatIcon from "../../assets/icons/users-2.png";
+import chatIcon from "../../assets/icons/chat-icon2.png";
 import startIcon from "../../assets/icons/start-button.png";
 
 export default function Taskbar(props) {
