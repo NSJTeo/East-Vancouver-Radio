@@ -24,10 +24,7 @@ export default function Player() {
         type="audio/mp3"
         muted={muted}
         controls
-        onPlay={() => console.log("play")}
-        onEnded={() => console.log("ended")}
         onWaiting={() => setPlay(true)}
-        onPlaying={() => console.log("playing")}
       />
       <button type="button" onClick={toggleMute}>
         Mute
