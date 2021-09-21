@@ -8,6 +8,7 @@ const {
 } = require("@fridgefm/radio-core");
 const schedule = require("node-schedule");
 const cors = require("cors");
+const { v4: uuidv4 } = require("uuid");
 
 // express setup
 const firstServer = express();
@@ -51,8 +52,10 @@ secondServer
     console.log("req.body", req.body.body);
     const commentDate = new Date();
     const newMessage = {
-      id: commentDate.getMilliseconds(),
+      name: req.body.name,
+      id: uuidv4(),
       body: req.body.body,
+      timestamp: commentDate.getTime(),
     };
     const chat = fs.readFileSync("./data/chat.json");
     const parsedChat = JSON.parse(chat);

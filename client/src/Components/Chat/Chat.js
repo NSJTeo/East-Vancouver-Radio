@@ -28,6 +28,7 @@ export default function Chat() {
     const form = formRef.current;
     socket.emit("send-chat-message", form.message.value);
     const newMessage = {
+      name: "test user",
       body: form.message.value,
     };
 
