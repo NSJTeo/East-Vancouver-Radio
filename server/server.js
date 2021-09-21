@@ -17,7 +17,11 @@ const io = require("socket.io")(3001, {
 });
 
 io.on("connection", (socket) => {
-  socket.emit("chat-message", "Hello World");
+  // socket.emit("chat-message", "Hello World");
+  socket.on("send-chat-message", (message) => {
+    console.log(message);
+    socket.broadcast.emit("chat-message", message);
+  });
 });
 
 server.use(express.json());
