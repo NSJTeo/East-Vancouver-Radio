@@ -9,6 +9,7 @@
     "axios": "^0.21.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.4",
     "react-scripts": "4.0.3",
     "sass": "^1.41.1",
     "socket.io-client": "^4.2.0",
