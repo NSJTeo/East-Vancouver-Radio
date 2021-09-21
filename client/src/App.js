@@ -31,6 +31,8 @@ function App() {
       <Taskbar
         handlePlayerIconClick={handlePlayerIconClick}
         handleChatIconClick={handleChatIconClick}
+        playerOn={playerOn}
+        chatOn={chatOn}
       />
     </div>
   );
