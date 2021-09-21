@@ -1,0 +1,48 @@
+.taskbar {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  border-top: 1px solid #f4f4f4;
+  border-bottom: 1px solid #4e4e4e;
+  background-color: silver;
+  padding: 0.1rem 0.15rem;
+  &__start {
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    margin-right: 0.25rem;
+    box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
+    padding: 0.1rem 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+  &__button {
+    display: flex;
+    align-items: center;
+    background-color: silver;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
+    margin-right: 0.25rem;
+    padding: 0.1rem 0.5rem;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__button-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  &__utility-container {
+    display: flex;
+    margin-left: auto;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+  }
+}

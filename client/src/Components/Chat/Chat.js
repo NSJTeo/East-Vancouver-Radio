@@ -56,12 +56,17 @@ export default function Chat(props) {
   };
 
   return (
-    <Draggable allowAnyClick={false} bounds="parent" handle=".chat__header">
+    <Draggable
+      allowAnyClick={false}
+      bounds="parent"
+      handle=".chat__header-grabbable"
+    >
       <div
         className={`chat__container ${chatOn ? "" : "chat__container--hidden"}`}
       >
         <div className="chat__header">
           <p className="chat__header-title">Chat!</p>
+          <div className="chat__header-grabbable"></div>
           <button className="chat__close-button">
             <img src={closeIcon} onClick={() => handleChatIconClick()} />
           </button>

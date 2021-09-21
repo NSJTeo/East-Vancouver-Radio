@@ -28,7 +28,10 @@ function App() {
       </button>
       <Player playerOn={playerOn} />
       <Chat chatOn={chatOn} handleChatIconClick={handleChatIconClick} />
-      <Taskbar />
+      <Taskbar
+        handlePlayerIconClick={handlePlayerIconClick}
+        handleChatIconClick={handleChatIconClick}
+      />
     </div>
   );
 }
