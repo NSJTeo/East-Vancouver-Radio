@@ -26,7 +26,10 @@ function App() {
         <img src={chatIcon} />
         <p>Chat</p>
       </button>
-      <Player playerOn={playerOn} />
+      <Player
+        playerOn={playerOn}
+        handlePlayerIconClick={handlePlayerIconClick}
+      />
       <Chat chatOn={chatOn} handleChatIconClick={handleChatIconClick} />
       <Taskbar
         handlePlayerIconClick={handlePlayerIconClick}

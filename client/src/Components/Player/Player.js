@@ -1,45 +1,52 @@
 import React, { useState, createRef } from "react";
+import Draggable from "react-draggable";
+import closeIcon from "../../assets/icons/close-icon.png";
 
 export default function Player(props) {
-  const [muted, setMuted] = useState(false);
-  const [play, setPlay] = useState(true);
   const playerRef = createRef();
-  const { playerOn } = props;
+  const { playerOn, handlePlayerIconClick } = props;
   console.log(playerOn);
 
   const toggleMute = () => {
-    setMuted(!muted);
     // playerRef.current.play();
   };
 
   const playAudio = () => {
     playerRef.current.play();
-    setPlay(false);
   };
 
   return (
-    <div
-      className={`player__container ${
-        playerOn ? "" : "player__container--hidden"
-      }`}
+    <Draggable
+      allowAnyClick={false}
+      bounds="parent"
+      // handle=".player__header-grabbable"
     >
-      {muted ? <p>Muted</p> : null}
-      <audio
-        ref={playerRef}
-        src="http://localhost:8080/stream"
-        type="audio/mp3"
-        muted={muted}
-        controls
-        onWaiting={() => setPlay(true)}
-      />
-      <button type="button" onClick={toggleMute}>
-        Mute
-      </button>
-      {play ? (
-        <button type="button" onClick={playAudio}>
-          Start Listening
+      <div
+        className={`player__container ${
+          playerOn ? "" : "player__container--hidden"
+        }`}
+      >
+        <audio
+          ref={playerRef}
+          src="http://localhost:8080/stream"
+          type="audio/mp3"
+          controls
+          className="player__container--hidden"
+        />
+        <div className="player__header">
+          <p className="player__header-title">Media Player</p>
+          <div className="player__header-grabbable"></div>
+          <button className="chat__close-button">
+            <img src={closeIcon} onClick={() => handlePlayerIconClick()} />
+          </button>
+        </div>
+        <button type="button" onClick={toggleMute}>
+          Pause
         </button>
-      ) : null}
-    </div>
+        <button type="button" onClick={playAudio}>
+          Play
+        </button>
+      </div>
+    </Draggable>
   );
 }
