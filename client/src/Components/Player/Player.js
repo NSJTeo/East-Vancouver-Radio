@@ -51,7 +51,9 @@ export default function Player(props) {
             <img src={closeIcon} onClick={() => handlePlayerIconClick()} />
           </button>
         </div>
-        <div>Now Playing: {currentShow}</div>
+        <div>
+          Now Playing: {currentShow.title} by {currentShow.artist}
+        </div>
         <button type="button" onClick={toggleMute}>
           Pause
         </button>

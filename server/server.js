@@ -64,7 +64,8 @@ secondServer
   });
 
 secondServer.get("/current-show", (_req, res) => {
-  res.status(200).send("Show information");
+  const currentSong = fs.readFileSync("./data/currentSong.json");
+  res.status(200).send(currentSong);
 });
 
 const station = new Station({
@@ -76,10 +77,17 @@ station.addFolder(musicPath);
 
 // update currently playing track info
 // could use a socket here to send information to client
-let currentTrack;
+// let currentTrack;
 station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
-  currentTrack = result;
+  const currentTrackInformation = {
+    title: result.title,
+    artist: result.artist,
+  };
+  fs.writeFileSync(
+    "./data/currentSong.json",
+    JSON.stringify(currentTrackInformation)
+  );
 });
 
 // station.on(PUBLIC_EVENTS.RESTART, () => {
