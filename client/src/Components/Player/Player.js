@@ -3,15 +3,17 @@ import Draggable from "react-draggable";
 import closeIcon from "../../assets/icons/close-icon.png";
 
 export default function Player(props) {
+  const [muted, setMuted] = useState(false);
   const playerRef = createRef();
   const { playerOn, handlePlayerIconClick } = props;
   console.log(playerOn);
 
   const toggleMute = () => {
-    // playerRef.current.play();
+    setMuted(true);
   };
 
   const playAudio = () => {
+    setMuted(false);
     playerRef.current.play();
   };
 
@@ -30,13 +32,14 @@ export default function Player(props) {
           ref={playerRef}
           src="http://localhost:8080/stream"
           type="audio/mp3"
+          muted={muted}
           controls
           className="player__container--hidden"
         />
         <div className="player__header">
           <p className="player__header-title">Media Player</p>
           <div className="player__header-grabbable"></div>
-          <button className="chat__close-button">
+          <button className="player__close-button">
             <img src={closeIcon} onClick={() => handlePlayerIconClick()} />
           </button>
         </div>

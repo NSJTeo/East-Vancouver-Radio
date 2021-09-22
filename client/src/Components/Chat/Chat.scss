@@ -55,7 +55,7 @@
     border-top: 2px solid #404040;
     border-right: 2px solid #f4f4f4;
     border-bottom: 2px solid #f4f4f4;
-    padding: 0rem 0.25rem;
+    padding: 0rem 0.2rem;
   }
   &__form {
     display: flex;
@@ -65,8 +65,9 @@
     border-top: 2px solid #404040;
     border-right: 2px solid #f4f4f4;
     border-bottom: 2px solid #f4f4f4;
-    margin-right: 0.5rem;
+    margin-right: 0.25rem;
     flex-grow: 1;
+    padding: 0.2rem;
   }
   &__username-input-button {
     background: none;
@@ -114,6 +115,6 @@
     }
   }
   &__message-container {
-    padding: 0.5rem 0.25rem;
+    padding: 0.2rem 0px;
   }
 }
