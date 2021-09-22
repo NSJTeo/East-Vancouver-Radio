@@ -81,8 +81,8 @@ station.addFolder(musicPath);
 station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   const currentTrackInformation = {
-    title: result.title,
-    artist: result.artist,
+    title: result.title || "Mystery Show",
+    artist: result.artist || "Mystery Host",
   };
   fs.writeFileSync(
     "./data/currentSong.json",
