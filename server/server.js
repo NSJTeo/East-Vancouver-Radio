@@ -9,23 +9,26 @@ const {
 const schedule = require("node-schedule");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 
 // express setup
 const firstServer = express();
 const secondServer = express();
 
 // constants
-const port = 8080;
-const secondPort = 8081;
+// express ports
+const port = 8080; //radio station
+const secondPort = 8081; //chat & song info API
+// socket port
+const thirdPort = 3001; //chat socket
 const musicPath = "./music";
 
 // chat socket setup
-const io = require("socket.io")(3001, {
+const io = require("socket.io")(thirdPort, {
   cors: {
     origin: "*",
   },
 });
-const fs = require("fs");
 
 io.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
@@ -59,6 +62,10 @@ secondServer
     fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
     res.status(200).json({ Success: true });
   });
+
+secondServer.get("/current-show", (_req, res) => {
+  res.status(200).send("Show information");
+});
 
 const station = new Station({
   verbose: true,

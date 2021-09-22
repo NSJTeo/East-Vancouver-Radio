@@ -1,9 +1,11 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import Draggable from "react-draggable";
 import closeIcon from "../../assets/icons/close-icon.png";
+import axios from "axios";
 
 export default function Player(props) {
   const [muted, setMuted] = useState(false);
+  const [currentShow, setCurrentShow] = useState("");
   const playerRef = createRef();
   const { playerOn, handlePlayerIconClick } = props;
   console.log(playerOn);
@@ -11,6 +13,12 @@ export default function Player(props) {
   const toggleMute = () => {
     setMuted(true);
   };
+
+  useEffect(() => {
+    axios.get("http://localhost:8081/current-show").then((response) => {
+      setCurrentShow(response.data);
+    });
+  }, []);
 
   const playAudio = () => {
     setMuted(false);
@@ -43,6 +51,7 @@ export default function Player(props) {
             <img src={closeIcon} onClick={() => handlePlayerIconClick()} />
           </button>
         </div>
+        <div>Now Playing: {currentShow}</div>
         <button type="button" onClick={toggleMute}>
           Pause
         </button>
