@@ -22,19 +22,22 @@ export default function Chat(props) {
   const messageEndRef = createRef();
 
   const scrollToBottom = () => {
-    messageEndRef.current.scrollIntoView({
-      behavior: "auto",
-      inline: "nearest",
-    });
+    console.log("scrolling to bottom");
+    if (!messageEndRef.current) {
+      return;
+    }
+    messageEndRef.current.scrollIntoView();
   };
 
   useEffect(() => {
+    console.log("use effect");
     getChatMessages();
   }, []);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messageEndRef]);
+  // useEffect(() => {
+  //   console.log("2nd scroll effect");
+  //   scrollToBottom();
+  // }, [messageEndRef]);
 
   const socket = io("http://localhost:3001");
   socket.on("chat-message", (data) => {
