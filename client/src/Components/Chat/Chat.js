@@ -26,7 +26,6 @@ export default function Chat(props) {
 
   const socket = io("http://localhost:3001");
   socket.on("chat-message", (data) => {
-    console.log("chat.js chat-message", data);
     getChatMessages();
   });
 
@@ -45,7 +44,6 @@ export default function Chat(props) {
     };
 
     axios.post("http://localhost:8081/chat", newMessage).then((response) => {
-      console.log(response.data);
       getChatMessages();
       form.reset();
     });

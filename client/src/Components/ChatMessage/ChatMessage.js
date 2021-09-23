@@ -12,7 +12,6 @@ export default function ChatMessage(props) {
   if (minutes.length === 1) {
     minutes = "0" + minutes;
   }
-  console.log(hour.length);
   return (
     <div>
       <p>

@@ -18,13 +18,19 @@ const secondServer = express();
 // constants
 // express ports
 const port = 8080; //radio station
-const secondPort = 8081; //chat & song info API
+const secondPort = 8081; //chat REST
 // socket port
-const thirdPort = 3001; //chat socket
+const thirdPort = 3001; //chat alert socket
+const fourthPort = 3002; //song update socket
 const musicPath = "./music";
 
 // chat socket setup
 const io = require("socket.io")(thirdPort, {
+  cors: {
+    origin: "*",
+  },
+});
+const songInfoSocket = require("socket.io")(fourthPort, {
   cors: {
     origin: "*",
   },
@@ -88,6 +94,7 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
     "./data/currentSong.json",
     JSON.stringify(currentTrackInformation)
   );
+  songInfoSocket.emit("song-information", currentTrackInformation);
 });
 
 // station.on(PUBLIC_EVENTS.RESTART, () => {

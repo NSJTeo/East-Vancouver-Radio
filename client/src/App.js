@@ -16,12 +16,10 @@ function App() {
   const [activeWindow, setActiveWindow] = useState("");
 
   const setPlayerToActive = () => {
-    console.log("player is now active");
     setActiveWindow("player");
   };
 
   const setChatToActive = () => {
-    console.log("chat is now active");
     setActiveWindow("chat");
   };
 

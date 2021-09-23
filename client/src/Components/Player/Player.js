@@ -2,6 +2,7 @@ import React, { useState, createRef, useEffect } from "react";
 import Draggable from "react-draggable";
 import closeIcon from "../../assets/icons/close-icon.png";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 export default function Player(props) {
   const [muted, setMuted] = useState(false);
@@ -14,6 +15,11 @@ export default function Player(props) {
     setMuted(true);
   };
 
+  const socket = io("http://localhost:3002");
+  socket.on("song-information", (data) => {
+    setCurrentShow(data);
+  });
+
   const getCurrentShow = () => {
     axios.get("http://localhost:8081/current-show").then((response) => {
       setCurrentShow(response.data);
@@ -21,8 +27,8 @@ export default function Player(props) {
   };
 
   useEffect(() => {
-    // refactor into a different function that is set as a node schedule job for the top of the hour and 2 minutes after the hour
     getCurrentShow();
+    playerRef.current.play();
   }, []);
 
   const playAudio = () => {
