@@ -14,11 +14,15 @@ export default function Player(props) {
     setMuted(true);
   };
 
-  useEffect(() => {
-    // refactor into a different function that is set as a node schedule job for the top of the hour and 2 minutes after the hour
+  const getCurrentShow = () => {
     axios.get("http://localhost:8081/current-show").then((response) => {
       setCurrentShow(response.data);
     });
+  };
+
+  useEffect(() => {
+    // refactor into a different function that is set as a node schedule job for the top of the hour and 2 minutes after the hour
+    getCurrentShow();
   }, []);
 
   const playAudio = () => {
