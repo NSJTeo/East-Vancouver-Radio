@@ -119,19 +119,23 @@ firstServer.get("/stream", (req, res) => {
 const hourlyChange = new schedule.RecurrenceRule();
 hourlyChange.minute = 0;
 schedule.scheduleJob(hourlyChange, () => {
+  deleteOldMessages();
   station.next();
   console.log("scheduled change");
 });
 
-// schedule files changes
-// schedule comment delete
-schedule.scheduleJob(hourlyChange, () => {
-  console.log("delete 6hr old comments");
+const deleteOldMessages = () => {
   const currentTime = new Date();
   const currentTimestamp = currentTime.getTime();
-  // how many milliseconds in 6 hours?
-});
-// utils schedule folder?
+  const millisecondsPerHour = 3600000;
+  const chat = fs.readFileSync("./data/chat.json");
+  const parsedChat = JSON.parse(chat);
+  const filteredChat = parsedChat.filter(
+    (message) => currentTimestamp - message.timestamp < 12 * millisecondsPerHour
+  );
+  fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
+  console.log("old messages deleted");
+};
 
 firstServer.listen(port, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
