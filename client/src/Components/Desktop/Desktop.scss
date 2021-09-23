@@ -1,0 +1,19 @@
+.desktop {
+  &__shortcut {
+    display: block;
+    background: none;
+    color: white;
+    border: none;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    &:hover {
+      cursor: pointer;
+    }
+    &:focus {
+      background: black;
+    }
+  }
+  &__icon {
+    margin-bottom: 0.25rem;
+  }
+}

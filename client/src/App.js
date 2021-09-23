@@ -5,6 +5,7 @@ import { useState } from "react";
 import playerIcon from "./assets/icons/wm-5.png";
 import chatIcon from "./assets/icons/chat-icon2.png";
 import Taskbar from "./Components/Taskbar/Taskbar";
+import Desktop from "./Components/Desktop/Desktop";
 
 function App() {
   const [playerOn, setPlayerOn] = useState(false);
@@ -33,14 +34,18 @@ function App() {
   };
   return (
     <div className="app-container">
-      <button onClick={handlePlayerIconClick}>
+      {/* <button className="desktop__icon" onClick={handlePlayerIconClick}>
         <img src={playerIcon} />
         <p>Radio</p>
       </button>
-      <button onClick={handleChatIconClick}>
+      <button className="desktop__icon" onClick={handleChatIconClick}>
         <img src={chatIcon} />
         <p>Chat</p>
-      </button>
+      </button> */}
+      <Desktop
+        handlePlayerIconClick={handlePlayerIconClick}
+        handleChatIconClick={handleChatIconClick}
+      />
       <Player
         playerOn={playerOn}
         handlePlayerIconClick={handlePlayerIconClick}

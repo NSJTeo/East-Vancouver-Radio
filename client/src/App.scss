@@ -1,5 +1,6 @@
 @use "./partials/global.scss" as *;
 @use "./partials/fonts.scss" as *;
+@use "./Components/Desktop/Desktop.scss" as *;
 @use "./Components/Player/Player.scss" as *;
 @use "./Components/Chat/Chat.scss" as *;
 @use "./Components/Taskbar/Taskbar.scss" as *;
