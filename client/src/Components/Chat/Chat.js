@@ -32,9 +32,11 @@ export default function Chat(props) {
   };
 
   useEffect(() => {
-    console.log("use effect");
     // const { username } = JSON.parse(localStorage.getItem("username"));
-    const storedUsername = localStorage.getItem("username");
+    let storedUsername = localStorage.getItem("username");
+    if (storedUsername === "null") {
+      storedUsername = null;
+    }
     if (storedUsername) {
       const { username } = JSON.parse(storedUsername);
       setUsername(username);
@@ -83,6 +85,12 @@ export default function Chat(props) {
     userRef.current.reset();
   };
 
+  const handleLogout = () => {
+    console.log("logged out");
+    localStorage.setItem("username", null);
+    setUsername(null);
+  };
+
   return (
     <Draggable
       allowAnyClick={false}
@@ -114,16 +122,25 @@ export default function Chat(props) {
         </section>
         <div className="chat__message-container">
           {username ? (
-            <form ref={formRef} className="chat__form">
-              <textarea className="chat__message-input" name="message" />
+            <>
+              <form ref={formRef} className="chat__form">
+                <textarea className="chat__message-input" name="message" />
+                <button
+                  className="chat__message-input-button"
+                  type="button"
+                  onClick={handleClick}
+                >
+                  <p>Send</p>
+                </button>
+              </form>
               <button
-                className="chat__message-input-button"
+                className="chat__logout-button"
                 type="button"
-                onClick={handleClick}
+                onClick={handleLogout}
               >
-                <p>Send</p>
+                Logout
               </button>
-            </form>
+            </>
           ) : (
             <form ref={userRef} className="chat__form">
               <input
