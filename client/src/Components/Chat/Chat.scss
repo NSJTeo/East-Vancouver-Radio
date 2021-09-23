@@ -95,7 +95,7 @@
     border-top: 2px solid #404040;
     border-right: 2px solid #f4f4f4;
     border-bottom: 2px solid #f4f4f4;
-    margin-right: 0.5rem;
+    margin-right: 0.2rem;
     resize: none;
     flex-grow: 1;
   }
@@ -118,11 +118,11 @@
     }
   }
   &__message-container {
-    padding: 0.2rem 0px;
+    padding-top: 0.2rem;
   }
   &__logout-button {
     background: none;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
     padding: 0.25rem;
     border-left: 1px solid #ededed;
     border-top: 1px solid #ededed;
