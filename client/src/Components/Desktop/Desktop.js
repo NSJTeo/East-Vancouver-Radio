@@ -1,6 +1,7 @@
 import React from "react";
 import playerIcon from "../../assets/icons/wm-5.png";
 import chatIcon from "../../assets/icons/chat-icon2.png";
+import scheduleIcon from "../../assets/icons/calendar-1.png";
 
 export default function Desktop(props) {
   const { handlePlayerIconClick, handleChatIconClick } = props;
@@ -15,7 +16,7 @@ export default function Desktop(props) {
         <p>Chat</p>
       </button>
       <button className="desktop__shortcut">
-        <img className="desktop__icon" />
+        <img className="desktop__icon" src={scheduleIcon} />
         <p>Schedule</p>
       </button>
     </div>
