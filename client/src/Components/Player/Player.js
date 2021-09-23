@@ -36,7 +36,8 @@ export default function Player(props) {
         className={`player__container ${
           playerOn ? "" : "player__container--hidden"
         } ${"player" === activeWindow ? "active" : ""}`}
-        onClick={() => setPlayerToActive()}
+        // onClick={() => setPlayerToActive()}
+        onMouseDownCapture={() => setPlayerToActive()}
       >
         <audio
           ref={playerRef}

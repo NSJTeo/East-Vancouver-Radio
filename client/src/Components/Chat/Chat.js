@@ -70,7 +70,8 @@ export default function Chat(props) {
         className={`chat__container ${
           chatOn ? "" : "chat__container--hidden"
         } ${"chat" === activeWindow ? "active" : ""}`}
-        onClick={() => setChatToActive()}
+        // onClick={() => setChatToActive()}
+        onMouseDownCapture={() => setChatToActive()}
       >
         <div className="chat__header">
           {username ? (
