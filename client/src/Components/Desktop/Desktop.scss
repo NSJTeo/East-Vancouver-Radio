@@ -4,13 +4,15 @@
     background: none;
     color: white;
     border: none;
-    margin: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
     padding: 0.5rem;
+    padding-top: 0.25rem;
     &:hover {
       cursor: pointer;
     }
     &:focus {
-      background: black;
+      background: rgba(0, 100, 0, 0.3);
     }
   }
   &__icon {

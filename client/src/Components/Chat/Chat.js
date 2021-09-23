@@ -14,9 +14,11 @@ export default function Chat(props) {
 
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
-      // sort messages by timestamp
       const messagesArray = response.data;
-      setMessages(messagesArray);
+      const sortedMessagesArray = messagesArray.sort((message1, message2) => {
+        return message1.timestamp - message2.timestamp;
+      });
+      setMessages(sortedMessagesArray);
     });
   };
   const messageEndRef = createRef();
@@ -84,7 +86,6 @@ export default function Chat(props) {
         className={`chat__container ${
           chatOn ? "" : "chat__container--hidden"
         } ${"chat" === activeWindow ? "active" : ""}`}
-        // onClick={() => setChatToActive()}
         onMouseDownCapture={() => setChatToActive()}
       >
         <div className="chat__header">
@@ -93,7 +94,6 @@ export default function Chat(props) {
           ) : (
             <p className="chat__header-title">Instant Message</p>
           )}
-          {/* <div className="chat__header-title">Instant Message</div> */}
           <div className="chat__header-grabbable"></div>
           <button className="chat__close-button">
             <img src={closeIcon} onClick={() => handleChatIconClick()} />
@@ -134,11 +134,6 @@ export default function Chat(props) {
               </button>
             </form>
           )}
-          {/* {username ? (
-            <p>Logged in as: {username}</p>
-          ) : (
-            <p>Please select username</p>
-          )} */}
         </div>
       </div>
     </Draggable>

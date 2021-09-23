@@ -15,10 +15,6 @@ export default function Desktop(props) {
         <img className="desktop__icon" src={chatIcon} />
         <p>Chat</p>
       </button>
-      {/* <button className="desktop__shortcut">
-        <img className="desktop__icon" src={scheduleIcon} />
-        <p>Schedule</p>
-      </button> */}
     </div>
   );
 }
