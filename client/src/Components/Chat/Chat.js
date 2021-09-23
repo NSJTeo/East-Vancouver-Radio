@@ -7,13 +7,12 @@ import Draggable from "react-draggable";
 
 export default function Chat(props) {
   const [messages, setMessages] = useState([]);
+  // set username to session storage, get from session storage during useEffect
   const [username, setUsername] = useState(null);
 
-  const { chatOn, handleChatIconClick } = props;
-  console.log(chatOn);
+  const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
-      console.log("response data", response.data);
       // sort messages by timestamp
       const messagesArray = response.data;
       setMessages(messagesArray);
@@ -68,7 +67,10 @@ export default function Chat(props) {
       handle=".chat__header-grabbable"
     >
       <div
-        className={`chat__container ${chatOn ? "" : "chat__container--hidden"}`}
+        className={`chat__container ${
+          chatOn ? "" : "chat__container--hidden"
+        } ${"chat" === activeWindow ? "active" : ""}`}
+        onClick={() => setChatToActive()}
       >
         <div className="chat__header">
           {username ? (

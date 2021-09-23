@@ -18,3 +18,7 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+.active {
+  z-index: 999;
+}

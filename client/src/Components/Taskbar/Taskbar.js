@@ -34,6 +34,7 @@ export default function Taskbar(props) {
         <img className="taskbar__button-icon" src={chatIcon} />
       </button>
       <div className="taskbar__utility-container">
+        {/* Add mute button functionality */}
         <button>Mute Icon</button>
         <p>2:45</p>
       </div>

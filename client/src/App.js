@@ -9,11 +9,28 @@ import Taskbar from "./Components/Taskbar/Taskbar";
 function App() {
   const [playerOn, setPlayerOn] = useState(false);
   const [chatOn, setChatOn] = useState(false);
+  // state tracks which window is active, last clicked
+  // window is activated when taskbar & desktop icons clicked, or windows themselves
+  // 6 onClicks to handle!
+  // this will add/remove class, class just sets z-index
+  const [activeWindow, setActiveWindow] = useState("");
+
+  const setPlayerToActive = () => {
+    console.log("player is now active");
+    setActiveWindow("player");
+  };
+
+  const setChatToActive = () => {
+    console.log("chat is now active");
+    setActiveWindow("chat");
+  };
 
   const handlePlayerIconClick = () => {
+    setPlayerToActive();
     setPlayerOn(!playerOn);
   };
   const handleChatIconClick = () => {
+    setChatToActive();
     setChatOn(!chatOn);
   };
   return (
@@ -29,8 +46,15 @@ function App() {
       <Player
         playerOn={playerOn}
         handlePlayerIconClick={handlePlayerIconClick}
+        setPlayerToActive={setPlayerToActive}
+        activeWindow={activeWindow}
       />
-      <Chat chatOn={chatOn} handleChatIconClick={handleChatIconClick} />
+      <Chat
+        chatOn={chatOn}
+        handleChatIconClick={handleChatIconClick}
+        setChatToActive={setChatToActive}
+        activeWindow={activeWindow}
+      />
       <Taskbar
         handlePlayerIconClick={handlePlayerIconClick}
         handleChatIconClick={handleChatIconClick}

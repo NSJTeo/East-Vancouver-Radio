@@ -7,14 +7,15 @@ export default function Player(props) {
   const [muted, setMuted] = useState(false);
   const [currentShow, setCurrentShow] = useState("");
   const playerRef = createRef();
-  const { playerOn, handlePlayerIconClick } = props;
-  console.log(playerOn);
+  const { playerOn, handlePlayerIconClick, activeWindow, setPlayerToActive } =
+    props;
 
   const toggleMute = () => {
     setMuted(true);
   };
 
   useEffect(() => {
+    // refactor into a different function that is set as a node schedule job for the top of the hour and 2 minutes after the hour
     axios.get("http://localhost:8081/current-show").then((response) => {
       setCurrentShow(response.data);
     });
@@ -29,12 +30,13 @@ export default function Player(props) {
     <Draggable
       allowAnyClick={false}
       bounds="parent"
-      // handle=".player__header-grabbable"
+      handle=".player__header-grabbable"
     >
       <div
         className={`player__container ${
           playerOn ? "" : "player__container--hidden"
-        }`}
+        } ${"player" === activeWindow ? "active" : ""}`}
+        onClick={() => setPlayerToActive()}
       >
         <audio
           ref={playerRef}
@@ -58,9 +60,7 @@ export default function Player(props) {
         ) : (
           <p>Off-Air</p>
         )}
-        {/* <p>
-          Now Playing: {currentShow.title} by {currentShow.artist}
-        </p> */}
+        {/* Need some icons and styles for these... please! */}
         <button type="button" onClick={toggleMute}>
           Pause
         </button>
