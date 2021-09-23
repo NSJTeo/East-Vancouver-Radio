@@ -24,12 +24,13 @@ const thirdPort = 3001; //chat alert socket
 const fourthPort = 3002; //song update socket
 const musicPath = "./music";
 
-// chat socket setup
+// chat socket
 const io = require("socket.io")(thirdPort, {
   cors: {
     origin: "*",
   },
 });
+// song information socket
 const songInfoSocket = require("socket.io")(fourthPort, {
   cors: {
     origin: "*",
