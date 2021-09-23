@@ -33,6 +33,12 @@ export default function Chat(props) {
 
   useEffect(() => {
     console.log("use effect");
+    // const { username } = JSON.parse(localStorage.getItem("username"));
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      const { username } = JSON.parse(storedUsername);
+      setUsername(username);
+    }
     getChatMessages();
   }, []);
 
@@ -72,6 +78,7 @@ export default function Chat(props) {
     if (!username) {
       return;
     }
+    localStorage.setItem("username", JSON.stringify({ username }));
     setUsername(username);
     userRef.current.reset();
   };
