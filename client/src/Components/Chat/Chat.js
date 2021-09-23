@@ -11,6 +11,7 @@ export default function Chat(props) {
   const [username, setUsername] = useState(null);
 
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
+
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
       // sort messages by timestamp
@@ -18,11 +19,22 @@ export default function Chat(props) {
       setMessages(messagesArray);
     });
   };
+  const messageEndRef = createRef();
+
+  const scrollToBottom = () => {
+    messageEndRef.current.scrollIntoView({
+      behavior: "auto",
+      inline: "nearest",
+    });
+  };
 
   useEffect(() => {
     getChatMessages();
-    // get username from session storage
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageEndRef]);
 
   const socket = io("http://localhost:3001");
   socket.on("chat-message", (data) => {
@@ -46,6 +58,7 @@ export default function Chat(props) {
     axios.post("http://localhost:8081/chat", newMessage).then((response) => {
       getChatMessages();
       form.reset();
+      scrollToBottom();
     });
   };
 
@@ -87,6 +100,7 @@ export default function Chat(props) {
           {messages.map((message) => (
             <ChatMessage key={message.id} {...message} />
           ))}
+          <div className="chat__messages-end" ref={messageEndRef}></div>
         </section>
         <div className="chat__message-container">
           {username ? (
