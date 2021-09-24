@@ -71,13 +71,14 @@ export default function Player(props) {
         ) : (
           <p>Off-Air</p>
         )}
-        {/* Need some icons and styles for these... please! */}
-        <button type="button" onClick={toggleMute}>
-          Pause
-        </button>
-        <button type="button" onClick={playAudio}>
-          Play
-        </button>
+        <div className="player__buttons">
+          <button className="player__button" type="button" onClick={toggleMute}>
+            Pause
+          </button>
+          <button className="player__button" type="button" onClick={playAudio}>
+            Play
+          </button>
+        </div>
       </div>
     </Draggable>
   );
