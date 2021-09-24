@@ -14,6 +14,7 @@ export default function SetupFiles(props) {
       })
       .then((response) => {
         console.log(response.data);
+        setFiles(JSON.parse(response.data));
       });
   };
   return (
