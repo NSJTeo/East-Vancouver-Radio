@@ -4,8 +4,14 @@ import chatIcon from "../../assets/icons/chat-icon2.png";
 import startIcon from "../../assets/icons/start-button.png";
 
 export default function Taskbar(props) {
-  const { handlePlayerIconClick, handleChatIconClick, playerOn, chatOn } =
-    props;
+  const {
+    handlePlayerIconClick,
+    handleChatIconClick,
+    handleSetupIconClick,
+    playerOn,
+    chatOn,
+    setupOn,
+  } = props;
   return (
     <div className="taskbar">
       <div className="taskbar__start">
@@ -31,6 +37,17 @@ export default function Taskbar(props) {
         onClick={() => handleChatIconClick()}
       >
         <p>Chat</p>
+        <img className="taskbar__button-icon" src={chatIcon} />
+      </button>
+      <button
+        className={
+          setupOn
+            ? "taskbar__button taskbar__button--active"
+            : "taskbar__button taskbar__button--inactive"
+        }
+        onClick={() => handleSetupIconClick()}
+      >
+        <p>Setup</p>
         <img className="taskbar__button-icon" src={chatIcon} />
       </button>
       <div className="taskbar__utility-container">

@@ -75,6 +75,19 @@ secondServer.get("/current-show", (_req, res) => {
   res.status(200).send(currentSong);
 });
 
+const getShows = () => {
+  let mp3Array = [];
+  fs.readdirSync(musicPath).forEach((file) => {
+    mp3Array.push(file);
+  });
+  return mp3Array;
+};
+
+secondServer.get("/schedule", (_req, res) => {
+  const shows = JSON.stringify(getShows());
+  res.status(200).json(shows);
+});
+
 const station = new Station({
   verbose: true,
 });

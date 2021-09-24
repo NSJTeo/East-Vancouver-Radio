@@ -6,14 +6,12 @@ import playerIcon from "./assets/icons/wm-5.png";
 import chatIcon from "./assets/icons/chat-icon2.png";
 import Taskbar from "./Components/Taskbar/Taskbar";
 import Desktop from "./Components/Desktop/Desktop";
+import Setup from "./Components/Setup/Setup";
 
 function App() {
   const [playerOn, setPlayerOn] = useState(false);
   const [chatOn, setChatOn] = useState(false);
-  // state tracks which window is active, last clicked
-  // window is activated when taskbar & desktop icons clicked, or windows themselves
-  // 6 onClicks to handle!
-  // this will add/remove class, class just sets z-index
+  const [setupOn, setSetupOn] = useState(false);
   const [activeWindow, setActiveWindow] = useState("");
 
   const setPlayerToActive = () => {
@@ -24,6 +22,10 @@ function App() {
     setActiveWindow("chat");
   };
 
+  const setSetupToActive = () => {
+    setActiveWindow("setup");
+  };
+
   const handlePlayerIconClick = () => {
     setPlayerToActive();
     setPlayerOn(!playerOn);
@@ -32,19 +34,16 @@ function App() {
     setChatToActive();
     setChatOn(!chatOn);
   };
+  const handleSetupIconClick = () => {
+    setSetupToActive();
+    setSetupOn(!setupOn);
+  };
   return (
     <div className="app-container">
-      {/* <button className="desktop__icon" onClick={handlePlayerIconClick}>
-        <img src={playerIcon} />
-        <p>Radio</p>
-      </button>
-      <button className="desktop__icon" onClick={handleChatIconClick}>
-        <img src={chatIcon} />
-        <p>Chat</p>
-      </button> */}
       <Desktop
         handlePlayerIconClick={handlePlayerIconClick}
         handleChatIconClick={handleChatIconClick}
+        handleSetupIconClick={handleSetupIconClick}
       />
       <Player
         playerOn={playerOn}
@@ -58,11 +57,19 @@ function App() {
         setChatToActive={setChatToActive}
         activeWindow={activeWindow}
       />
+      <Setup
+        setupOn={setupOn}
+        handleSetupIconClick={handleSetupIconClick}
+        setSetupToActive={setSetupToActive}
+        activeWindow={activeWindow}
+      />
       <Taskbar
         handlePlayerIconClick={handlePlayerIconClick}
         handleChatIconClick={handleChatIconClick}
+        handleSetupIconClick={handleSetupIconClick}
         playerOn={playerOn}
         chatOn={chatOn}
+        setupOn={setupOn}
       />
     </div>
   );
