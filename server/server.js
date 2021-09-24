@@ -126,8 +126,21 @@ secondServer.post("/login", (req, res) => {
   }
 });
 
-secondServer.get("/system-information", (req, res) => {
+secondServer.get("/system-information", (_req, res) => {
   const shows = JSON.stringify(getShows());
+  res.status(200).json(shows);
+});
+
+secondServer.delete("/system-information/:fileName", (req, res) => {
+  console.log(req.params);
+  fs.readdirSync(musicPath).forEach((file) => {
+    if (file === req.params.fileName) {
+      fs.unlinkSync(`./music/${file}`);
+      console.log(`deleted ${file}`);
+    }
+  });
+  const shows = JSON.stringify(getShows());
+  console.log(shows);
   res.status(200).json(shows);
 });
 

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import SetupFiles from "../SetupFiles/SetupFiles";
 
 export default function SetupInfo() {
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState([]);
+
   useEffect(() => {
     const token = sessionStorage.getItem("login");
     axios
@@ -12,16 +14,22 @@ export default function SetupInfo() {
         },
       })
       .then((response) => {
-        setFiles(response.data);
+        setFiles(JSON.parse(response.data));
       });
   }, []);
+  console.log("type", typeof files);
   return (
     <>
       {files && (
+        // <div>
+        //   Files:
+        //   {files.map((file) => (
+        //     <p key={file}>{file}</p>
+        //   ))}
+        // </div>
         <div>
-          Files:
           {files.map((file) => (
-            <p key={file}>{file}</p>
+            <SetupFiles key={file} file={file} setFiles={setFiles} />
           ))}
         </div>
       )}

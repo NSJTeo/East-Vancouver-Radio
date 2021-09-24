@@ -1,0 +1,28 @@
+.setup-files {
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    margin-right: 0.25rem;
+  }
+  &__delete-button {
+    background: none;
+    margin-top: 0.2rem;
+    padding: 0.25rem;
+    border-left: 1px solid #ededed;
+    border-top: 1px solid #ededed;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
+    &:hover {
+      cursor: pointer;
+    }
+    &:active {
+      border-right: 1px solid #ededed;
+      border-bottom: 1px solid #ededed;
+      border-left: 2px solid #404040;
+      border-top: 2px solid #404040;
+    }
+  }
+}
