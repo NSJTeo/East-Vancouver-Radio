@@ -6,11 +6,9 @@ import closeIcon from "../../assets/icons/close-icon.png";
 import Draggable from "react-draggable";
 
 export default function Chat(props) {
-  const [messages, setMessages] = useState([]);
-  // set username to session storage, get from session storage during useEffect
-  const [username, setUsername] = useState(null);
-
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
+  const [messages, setMessages] = useState([]);
+  const [username, setUsername] = useState(null);
 
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
