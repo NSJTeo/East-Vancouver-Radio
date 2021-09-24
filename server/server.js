@@ -10,6 +10,8 @@ const schedule = require("node-schedule");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
+const jsonSecretKey = "eastvancouver";
 
 // express setup
 const firstServer = express();
@@ -47,6 +49,30 @@ io.on("connection", (socket) => {
 secondServer.use(express.json());
 secondServer.use(cors({ origin: "*" }));
 secondServer.use(express.static("public"));
+const getToken = (req) => {
+  return req.headers.authorization.split(" ")[1];
+};
+secondServer.use((req, res, next) => {
+  const publicURLs = ["/schedule", "/login", "/chat", "/current-show"];
+  if (publicURLs.includes(req.url)) next();
+  else {
+    // Format of request is BEARER <token>. Splitting on ' ' will create an
+    // array where the token is at index 1
+    const token = getToken(req);
+    if (token) {
+      if (jwt.verify(token, jsonSecretKey)) {
+        // Decode the token to pass along to end-points that may need
+        // access to data stored in the token.
+        req.decode = jwt.decode(token);
+        next();
+      } else {
+        res.status(403).json({ error: "Not Authorized." });
+      }
+    } else {
+      res.status(403).json({ error: "No token. Unauthorized." });
+    }
+  }
+});
 
 // chat endpoints
 secondServer
@@ -84,6 +110,23 @@ const getShows = () => {
 };
 
 secondServer.get("/schedule", (_req, res) => {
+  const shows = JSON.stringify(getShows());
+  res.status(200).json(shows);
+});
+
+secondServer.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "nicholas" && password === "nicholas") {
+    res.json({ token: jwt.sign({ name: username }, jsonSecretKey) });
+  } else {
+    res.json({
+      token: "",
+      error: "Nice try!",
+    });
+  }
+});
+
+secondServer.get("/system-information", (req, res) => {
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
