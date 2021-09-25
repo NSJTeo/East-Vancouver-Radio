@@ -15,45 +15,46 @@ const jsonSecretKey = "eastvancouver";
 const fileUpload = require("express-fileupload");
 
 // express setup
-const firstServer = express();
-const secondServer = express();
+const musicStream = express(); //musicStream
+const API = express(); //general API: chat log & music information
 
 // constants
 // express ports
-const port = 8080; //radio station
-const secondPort = 8081; //chat REST
+const radioPort = 8080; //radio station
+const apiPort = 8081; //chat REST
 // socket port
-const thirdPort = 3001; //chat alert socket
-const fourthPort = 3002; //song update socket
+const chatPort = 3001; //chat alert socket
+const schedulePort = 3002; //song update socket
 const musicPath = "./music";
 
 // chat socket
-const io = require("socket.io")(thirdPort, {
+const chatSocket = require("socket.io")(chatPort, {
   cors: {
     origin: "*",
   },
 });
-// song information socket
-const songInfoSocket = require("socket.io")(fourthPort, {
+// schedule update socket
+const scheduleSocket = require("socket.io")(schedulePort, {
   cors: {
     origin: "*",
   },
 });
 
-io.on("connection", (socket) => {
+chatSocket.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
     socket.broadcast.emit("chat-message", message);
   });
 });
 
 // middleware
-secondServer.use(express.json());
-secondServer.use(cors({ origin: "*" }));
-secondServer.use(express.static("public"));
+API.use(express.json());
+API.use(cors({ origin: "*" }));
+API.use(express.static("public"));
+API.use(fileUpload());
 const getToken = (req) => {
   return req.headers.authorization.split(" ")[1];
 };
-secondServer.use((req, res, next) => {
+API.use((req, res, next) => {
   const publicURLs = ["/schedule", "/login", "/chat", "/current-show"];
   if (publicURLs.includes(req.url)) next();
   else {
@@ -74,31 +75,28 @@ secondServer.use((req, res, next) => {
     }
   }
 });
-secondServer.use(fileUpload());
 
 // chat endpoints
-secondServer
-  .get("/chat", (_req, res) => {
-    const chat = fs.readFileSync("./data/chat.json");
-    const parsedChat = JSON.parse(chat);
-    res.json(parsedChat);
-  })
-  .post("/chat", (req, res) => {
-    const commentDate = new Date();
-    const newMessage = {
-      name: req.body.name,
-      id: uuidv4(),
-      body: req.body.body,
-      timestamp: commentDate.getTime(),
-    };
-    const chat = fs.readFileSync("./data/chat.json");
-    const parsedChat = JSON.parse(chat);
-    parsedChat.push(newMessage);
-    fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
-    res.status(200).json({ Success: true });
-  });
+API.get("/chat", (_req, res) => {
+  const chat = fs.readFileSync("./data/chat.json");
+  const parsedChat = JSON.parse(chat);
+  res.json(parsedChat);
+}).post("/chat", (req, res) => {
+  const commentDate = new Date();
+  const newMessage = {
+    name: req.body.name,
+    id: uuidv4(),
+    body: req.body.body,
+    timestamp: commentDate.getTime(),
+  };
+  const chat = fs.readFileSync("./data/chat.json");
+  const parsedChat = JSON.parse(chat);
+  parsedChat.push(newMessage);
+  fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
+  res.status(200).json({ Success: true });
+});
 
-secondServer.get("/current-show", (_req, res) => {
+API.get("/current-show", (_req, res) => {
   const currentSong = fs.readFileSync("./data/currentSong.json");
   res.status(200).send(currentSong);
 });
@@ -111,12 +109,12 @@ const getShows = () => {
   return mp3Array;
 };
 
-secondServer.get("/schedule", (_req, res) => {
+API.get("/schedule", (_req, res) => {
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
 
-secondServer.post("/login", (req, res) => {
+API.post("/login", (req, res) => {
   const { username, password } = req.body;
   if (username === "nicholas" && password === "nicholas") {
     res.json({ token: jwt.sign({ name: username }, jsonSecretKey) });
@@ -128,12 +126,12 @@ secondServer.post("/login", (req, res) => {
   }
 });
 
-secondServer.get("/system-information", (_req, res) => {
+API.get("/system-information", (_req, res) => {
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
 
-secondServer.delete("/system-information/:fileName", (req, res) => {
+API.delete("/system-information/:fileName", (req, res) => {
   fs.readdirSync(musicPath).forEach((file) => {
     if (file === req.params.fileName) {
       fs.unlinkSync(`./music/${file}`);
@@ -141,26 +139,21 @@ secondServer.delete("/system-information/:fileName", (req, res) => {
     }
   });
   const shows = JSON.stringify(getShows());
+  station.start();
   res.status(200).json(shows);
 });
 
-secondServer.post("/upload", (req, res) => {
-  console.log("upload");
-  let sampleFile;
-  let uploadPath;
-
+API.post("/upload", (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send("No files were uploaded.");
   }
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   const file = req.files.file;
-
-  // Use the mv() method to place the file somewhere on your server
   file.mv(`./music/${file.name}`, function (err) {
-    if (err) return res.status(500).send(err);
-
+    if (err) {
+      return res.status(500).send(err);
+    }
     const shows = JSON.stringify(getShows());
+    station.start();
     res.status(200).json(shows);
   });
 });
@@ -185,7 +178,7 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
     "./data/currentSong.json",
     JSON.stringify(currentTrackInformation)
   );
-  songInfoSocket.emit("song-information", currentTrackInformation);
+  scheduleSocket.emit("song-information", currentTrackInformation);
 });
 
 // station.on(PUBLIC_EVENTS.RESTART, () => {
@@ -196,7 +189,7 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
 station.on(PUBLIC_EVENTS.ERROR, console.error);
 
 // main stream route
-firstServer.get("/stream", (req, res) => {
+musicStream.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
 
@@ -227,11 +220,11 @@ const deleteOldMessages = () => {
   console.log("old messages deleted");
 };
 
-firstServer.listen(port, () => {
-  console.log(`RADIO APP IS AVAILABLE ON http://localhost:${port}`);
+musicStream.listen(radioPort, () => {
+  console.log(`RADIO APP IS AVAILABLE ON http://localhost:${radioPort}`);
   station.start();
 });
 
-secondServer.listen(secondPort, () => {
+API.listen(apiPort, () => {
   console.log("second server is listening");
 });
