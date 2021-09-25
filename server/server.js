@@ -12,6 +12,7 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const jsonSecretKey = "eastvancouver";
+const fileUpload = require("express-fileupload");
 
 // express setup
 const firstServer = express();
@@ -73,6 +74,7 @@ secondServer.use((req, res, next) => {
     }
   }
 });
+secondServer.use(fileUpload());
 
 // chat endpoints
 secondServer
@@ -132,7 +134,6 @@ secondServer.get("/system-information", (_req, res) => {
 });
 
 secondServer.delete("/system-information/:fileName", (req, res) => {
-  console.log(req.params);
   fs.readdirSync(musicPath).forEach((file) => {
     if (file === req.params.fileName) {
       fs.unlinkSync(`./music/${file}`);
@@ -140,8 +141,27 @@ secondServer.delete("/system-information/:fileName", (req, res) => {
     }
   });
   const shows = JSON.stringify(getShows());
-  console.log(shows);
   res.status(200).json(shows);
+});
+
+secondServer.post("/upload", (req, res) => {
+  console.log("upload");
+  let sampleFile;
+  let uploadPath;
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+  const file = req.files.file;
+
+  // Use the mv() method to place the file somewhere on your server
+  file.mv(`./music/${file.name}`, function (err) {
+    if (err) return res.status(500).send(err);
+
+    res.send("File uploaded!");
+  });
 });
 
 const station = new Station({
