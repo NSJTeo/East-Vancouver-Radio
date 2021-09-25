@@ -42,8 +42,9 @@ export default function Setup(props) {
         onMouseDownCapture={() => setSetupToActive()}
       >
         <div className="setup__header">
-          <p className="setup__header-title">Setup</p>
-          <div className="setup__header-grabbable"></div>
+          <div className="setup__header-grabbable">
+            <p>Setup</p>
+          </div>
           <button className="setup__close-button">
             <img
               src={closeIcon}

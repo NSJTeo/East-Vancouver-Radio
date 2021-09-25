@@ -97,12 +97,9 @@ export default function Chat(props) {
         onMouseDownCapture={() => setChatToActive()}
       >
         <div className="chat__header">
-          {username ? (
-            <p className="chat__header-title">{username}</p>
-          ) : (
-            <p className="chat__header-title">Instant Message</p>
-          )}
-          <div className="chat__header-grabbable"></div>
+          <div className="chat__header-grabbable">
+            {username ? <p>{username}</p> : <p>Instant Message</p>}
+          </div>
           <button className="chat__close-button">
             <img
               src={closeIcon}

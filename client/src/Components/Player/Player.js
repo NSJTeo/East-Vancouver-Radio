@@ -58,8 +58,9 @@ export default function Player(props) {
           className="player__container--hidden"
         />
         <div className="player__header">
-          <p className="player__header-title">Media Player</p>
-          <div className="player__header-grabbable"></div>
+          <div className="player__header-grabbable">
+            <p>Media Player</p>
+          </div>
           <button className="player__close-button">
             <img
               src={closeIcon}

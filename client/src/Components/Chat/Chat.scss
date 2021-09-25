@@ -23,11 +23,8 @@
     line-height: 1.4;
     background: navy;
   }
-  &__header-title {
-    color: white;
-  }
   &__header-grabbable {
-    height: 100%;
+    color: white;
     flex-grow: 1;
     &:hover {
       cursor: grab;
