@@ -1,6 +1,5 @@
 import React, { useState, createRef, useEffect } from "react";
 import Draggable from "react-draggable";
-import closeIcon from "../../assets/icons/close-icon.png";
 import axios from "axios";
 import { io } from "socket.io-client";
 import PlayerHeader from "../PlayerHeader/PlayerHeader";

@@ -53,7 +53,7 @@ export default function SetupInfo() {
         </div>
       )}
       <form id="upload-file-form" className="setup-info__form">
-        <label className="setup-info__form-label" for="file">
+        <label className="setup-info__form-label" htmlFor="file">
           Choose file to upload:
         </label>
         <input

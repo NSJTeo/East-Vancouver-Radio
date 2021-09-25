@@ -10,18 +10,17 @@ export default function Setup(props) {
     props;
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState("");
+
   const formRef = createRef();
   const handleLogin = () => {
     const loginInfo = {
       username: formRef.current.username.value,
       password: formRef.current.password.value,
     };
-    console.log(loginInfo);
     axios.post("http://localhost:8081/login", loginInfo).then((response) => {
-      console.log(response);
       if (response.data.error) {
-        setError(response.data.error);
         formRef.current.reset();
+        setError(response.data.error);
         return;
       }
       sessionStorage.setItem("login", response.data.token);
