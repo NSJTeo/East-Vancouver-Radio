@@ -2,8 +2,9 @@ import React, { createRef, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 import ChatMessage from "../ChatMessage/ChatMessage";
-import closeIcon from "../../assets/icons/close-icon.png";
+// import closeIcon from "../../assets/icons/close-icon.png";
 import Draggable from "react-draggable";
+import ChatHeader from "../ChatHeader/ChatHeader";
 
 export default function Chat(props) {
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
@@ -88,7 +89,7 @@ export default function Chat(props) {
     <Draggable
       allowAnyClick={false}
       bounds="parent"
-      handle=".chat__header-grabbable"
+      handle=".chat-header__grabbable"
     >
       <div
         className={`chat__container ${
@@ -96,18 +97,10 @@ export default function Chat(props) {
         } ${"chat" === activeWindow ? "active" : ""}`}
         onMouseDownCapture={() => setChatToActive()}
       >
-        <div className="chat__header">
-          <div className="chat__header-grabbable">
-            {username ? <p>{username}</p> : <p>Instant Message</p>}
-          </div>
-          <button className="chat__close-button">
-            <img
-              src={closeIcon}
-              onClick={() => handleChatIconClick()}
-              alt="Click X to close"
-            />
-          </button>
-        </div>
+        <ChatHeader
+          username={username}
+          handleChatIconClick={handleChatIconClick}
+        />
         <section className="chat__window">
           {messages.map((message) => (
             <ChatMessage key={message.id} {...message} />

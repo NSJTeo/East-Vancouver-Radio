@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import closeIcon from "../../assets/icons/close-icon.png";
 import axios from "axios";
 import { io } from "socket.io-client";
+import PlayerHeader from "../PlayerHeader/PlayerHeader";
 
 export default function Player(props) {
   const [muted, setMuted] = useState(false);
@@ -57,18 +58,7 @@ export default function Player(props) {
           controls
           className="player__container--hidden"
         />
-        <div className="player__header">
-          <div className="player__header-grabbable">
-            <p>Media Player</p>
-          </div>
-          <button className="player__close-button">
-            <img
-              src={closeIcon}
-              onClick={() => handlePlayerIconClick()}
-              alt="Click X to close"
-            />
-          </button>
-        </div>
+        <PlayerHeader handlePlayerIconClick={handlePlayerIconClick} />
         {currentShow ? (
           <p>
             Now Playing: {currentShow.title} by {currentShow.artist}

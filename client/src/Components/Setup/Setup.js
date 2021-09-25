@@ -1,8 +1,9 @@
 import React, { useState, createRef } from "react";
 import Draggable from "react-draggable";
-import closeIcon from "../../assets/icons/close-icon.png";
+
 import axios from "axios";
 import SetupInfo from "../SetupInfo/SetupInfo";
+import SetupHeader from "../SetupHeader/SetupHeader";
 
 export default function Setup(props) {
   const { setupOn, handleSetupIconClick, activeWindow, setSetupToActive } =
@@ -41,18 +42,7 @@ export default function Setup(props) {
         } ${"setup" === activeWindow ? "active" : ""}`}
         onMouseDownCapture={() => setSetupToActive()}
       >
-        <div className="setup__header">
-          <div className="setup__header-grabbable">
-            <p>Setup</p>
-          </div>
-          <button className="setup__close-button">
-            <img
-              src={closeIcon}
-              onClick={() => handleSetupIconClick()}
-              alt="Click X to close"
-            />
-          </button>
-        </div>
+        <SetupHeader handleSetupIconClick={handleSetupIconClick} />
         {loggedIn ? (
           <SetupInfo />
         ) : (
