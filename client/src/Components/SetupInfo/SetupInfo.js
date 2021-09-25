@@ -34,7 +34,7 @@ export default function SetupInfo() {
         },
       })
       .then((response) => {
-        console.log(response);
+        setFiles(JSON.parse(response.data));
       });
   };
 

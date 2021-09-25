@@ -160,7 +160,8 @@ secondServer.post("/upload", (req, res) => {
   file.mv(`./music/${file.name}`, function (err) {
     if (err) return res.status(500).send(err);
 
-    res.send("File uploaded!");
+    const shows = JSON.stringify(getShows());
+    res.status(200).json(shows);
   });
 });
 
