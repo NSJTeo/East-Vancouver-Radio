@@ -1,7 +1,7 @@
 .setup {
   &__container {
     position: absolute;
-    width: 35vw;
+    width: 45vw;
     background-color: #c6c6c6;
     border-top: 2px solid #efefef;
     border-left: 2px solid #efefef;
@@ -68,5 +68,22 @@
       border-left: 2px solid #404040;
       border-top: 2px solid #404040;
     }
+  }
+  &__label-input-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.2rem 0;
+  }
+  &__login-label {
+    width: 4.5rem;
+  }
+  &__login-input {
+    border-left: 2px solid #404040;
+    border-top: 2px solid #404040;
+    border-right: 2px solid #f4f4f4;
+    border-bottom: 2px solid #f4f4f4;
+    margin-right: 0.2rem;
+    resize: none;
+    flex-grow: 1;
   }
 }

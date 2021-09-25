@@ -45,7 +45,11 @@ export default function Setup(props) {
           <p className="setup__header-title">Setup</p>
           <div className="setup__header-grabbable"></div>
           <button className="setup__close-button">
-            <img src={closeIcon} onClick={() => handleSetupIconClick()} />
+            <img
+              src={closeIcon}
+              onClick={() => handleSetupIconClick()}
+              alt="Click X to close"
+            />
           </button>
         </div>
         {loggedIn ? (
@@ -53,12 +57,12 @@ export default function Setup(props) {
         ) : (
           <>
             <form ref={formRef}>
-              <div>
-                <label>Username</label>
+              <div className="setup__label-input-container">
+                <label className="setup__login-label">Username</label>
                 <input className="setup__login-input" name="username" />
               </div>
-              <div>
-                <label>Password</label>
+              <div className="setup__label-input-container">
+                <label className="setup__login-label">Password</label>
                 <input
                   className="setup__login-input"
                   type="password"

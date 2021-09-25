@@ -42,11 +42,6 @@ export default function Chat(props) {
     getChatMessages();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("2nd scroll effect");
-  //   scrollToBottom();
-  // }, [messageEndRef]);
-
   const socket = io("http://localhost:3001");
   socket.on("chat-message", (data) => {
     getChatMessages();
@@ -109,7 +104,11 @@ export default function Chat(props) {
           )}
           <div className="chat__header-grabbable"></div>
           <button className="chat__close-button">
-            <img src={closeIcon} onClick={() => handleChatIconClick()} />
+            <img
+              src={closeIcon}
+              onClick={() => handleChatIconClick()}
+              alt="Click X to close"
+            />
           </button>
         </div>
         <section className="chat__window">

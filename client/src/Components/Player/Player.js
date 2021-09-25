@@ -49,6 +49,7 @@ export default function Player(props) {
         onMouseDownCapture={() => setPlayerToActive()}
       >
         <audio
+          id="audio-player"
           ref={playerRef}
           src="http://localhost:8080/stream"
           type="audio/mp3"
@@ -60,7 +61,11 @@ export default function Player(props) {
           <p className="player__header-title">Media Player</p>
           <div className="player__header-grabbable"></div>
           <button className="player__close-button">
-            <img src={closeIcon} onClick={() => handlePlayerIconClick()} />
+            <img
+              src={closeIcon}
+              onClick={() => handlePlayerIconClick()}
+              alt="Click X to close"
+            />
           </button>
         </div>
         {currentShow ? (
