@@ -2,6 +2,7 @@
   &__form {
     display: flex;
     flex-direction: column;
+    padding-bottom: 0.2rem;
   }
   &__button {
     background: none;
@@ -23,7 +24,6 @@
     }
   }
   &__form-label {
-    padding-top: 1rem;
     padding-bottom: 0.2rem;
   }
 }
