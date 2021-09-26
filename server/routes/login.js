@@ -6,7 +6,7 @@ const jsonSecretKey = "eastvancouver";
 router.post("/", (req, res) => {
   try {
     const { username, password } = req.body;
-    if (username === "nicholas" && password === "nicholas") {
+    if (username === "admin" && password === "evilways!420") {
       res
         .status(200)
         .json({ token: jwt.sign({ name: username }, jsonSecretKey) });
