@@ -10,7 +10,6 @@ const deleteOldMessages = () => {
     (message) => currentTimestamp - message.timestamp < 1 * millisecondsPerHour
   );
   fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
-  chatSocket.emit("send-chat-message", "delete old comments");
   console.log("old messages deleted");
 };
 

@@ -80,14 +80,6 @@ API.use((req, res, next) => {
   }
 });
 
-// const getShows = () => {
-//   let mp3Array = [];
-//   fs.readdirSync(musicPath).forEach((file) => {
-//     mp3Array.push(file);
-//   });
-//   return mp3Array;
-// };
-
 API.get("/system-information", (_req, res) => {
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
@@ -149,20 +141,6 @@ schedule.scheduleJob(hourlyChange, () => {
   station.next();
   console.log("scheduled change");
 });
-
-// const deleteOldMessages = () => {
-//   const currentTime = new Date();
-//   const currentTimestamp = currentTime.getTime();
-//   const millisecondsPerHour = 3600000;
-//   const chat = fs.readFileSync("./data/chat.json");
-//   const parsedChat = JSON.parse(chat);
-//   const filteredChat = parsedChat.filter(
-//     (message) => currentTimestamp - message.timestamp < 1 * millisecondsPerHour
-//   );
-//   fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
-//   chatSocket.emit("send-chat-message", "delete old comments");
-//   console.log("old messages deleted");
-// };
 
 musicStream.listen(radioPort, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${radioPort}`);
