@@ -27,6 +27,9 @@ export default function SetupInfo() {
         setFiles(JSON.parse(response.data));
         setFileToUpload(null);
         uploadFileForm.reset();
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   //

@@ -86,30 +86,39 @@ API.get("/system-information", (_req, res) => {
 });
 
 API.delete("/system-information/:fileName", (req, res) => {
-  fs.readdirSync(musicPath).forEach((file) => {
-    if (file === req.params.fileName) {
-      fs.unlinkSync(`./music/${file}`);
-      console.log(`deleted ${file}`);
-    }
-  });
-  const shows = JSON.stringify(getShows());
-  station.start();
-  res.status(200).json(shows);
-});
-
-API.post("/upload", (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-  const file = req.files.file;
-  file.mv(`./music/${file.name}`, function (err) {
-    if (err) {
-      return res.status(500).send(err);
-    }
+  try {
+    fs.readdirSync(musicPath).forEach((file) => {
+      if (file === req.params.fileName) {
+        fs.unlinkSync(`./music/${file}`);
+        console.log(`deleted ${file}`);
+      }
+    });
+  } catch {
+    console.log("Couldn't delete mp3");
+  } finally {
     const shows = JSON.stringify(getShows());
     station.start();
     res.status(200).json(shows);
-  });
+  }
+});
+
+API.post("/upload", (req, res) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
+    }
+    const file = req.files.file;
+    file.mv(`./music/${file.name}`, function (err) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      const shows = JSON.stringify(getShows());
+      station.start();
+      res.status(200).json(shows);
+    });
+  } catch {
+    res.status(404).send();
+  }
 });
 
 // add folder to station

@@ -35,7 +35,6 @@ export default function Setup(props) {
         setLoggedIn(false);
       });
   };
-  console.log(loggedIn);
   return (
     <Draggable
       allowAnyClick={false}
