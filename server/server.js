@@ -1,18 +1,15 @@
 // module imports
 const express = require("express");
-const path = require("path");
-const {
-  Station,
-  SHUFFLE_METHODS,
-  PUBLIC_EVENTS,
-} = require("@fridgefm/radio-core");
+const { Station, PUBLIC_EVENTS } = require("@fridgefm/radio-core");
 const schedule = require("node-schedule");
 const cors = require("cors");
-const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const jsonSecretKey = "eastvancouver";
 const fileUpload = require("express-fileupload");
+// routers
+const chatRouter = require("./routes/chat.js");
+const currentShowRouter = require("./routes/currentShow.js");
+const loginRouter = require("./routes/login.js");
 
 // express setup
 const musicStream = express(); //musicStream
@@ -40,6 +37,10 @@ const scheduleSocket = require("socket.io")(schedulePort, {
   },
 });
 
+const station = new Station({
+  verbose: true,
+});
+
 chatSocket.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
     console.log(message);
@@ -52,7 +53,11 @@ API.use(express.json());
 API.use(cors({ origin: "*" }));
 API.use(express.static("public"));
 API.use(fileUpload());
+API.use("/chat", chatRouter);
+API.use("/current-show", currentShowRouter);
+API.use("/login", loginRouter);
 // JWT authentication
+const jsonSecretKey = "eastvancouver";
 const getToken = (req) => {
   return req.headers.authorization.split(" ")[1];
 };
@@ -60,13 +65,9 @@ API.use((req, res, next) => {
   const publicURLs = ["/schedule", "/login", "/chat", "/current-show"];
   if (publicURLs.includes(req.url)) next();
   else {
-    // Format of request is BEARER <token>. Splitting on ' ' will create an
-    // array where the token is at index 1
     const token = getToken(req);
     if (token) {
       if (jwt.verify(token, jsonSecretKey)) {
-        // Decode the token to pass along to end-points that may need
-        // access to data stored in the token.
         req.decode = jwt.decode(token);
         next();
       } else {
@@ -78,32 +79,6 @@ API.use((req, res, next) => {
   }
 });
 
-// chat endpoints
-API.get("/chat", (_req, res) => {
-  const chat = fs.readFileSync("./data/chat.json");
-  const parsedChat = JSON.parse(chat);
-  res.json(parsedChat);
-}).post("/chat", (req, res) => {
-  const commentDate = new Date();
-  const newMessage = {
-    name: req.body.name,
-    id: uuidv4(),
-    body: req.body.body,
-    timestamp: commentDate.getTime(),
-  };
-  const chat = fs.readFileSync("./data/chat.json");
-  const parsedChat = JSON.parse(chat);
-  parsedChat.push(newMessage);
-  fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
-  // chatSocket.emit("send-chat-message", "hello");
-  res.status(200).json(JSON.stringify(parsedChat));
-});
-
-API.get("/current-show", (_req, res) => {
-  const currentSong = fs.readFileSync("./data/currentSong.json");
-  res.status(200).send(currentSong);
-});
-
 const getShows = () => {
   let mp3Array = [];
   fs.readdirSync(musicPath).forEach((file) => {
@@ -112,29 +87,30 @@ const getShows = () => {
   return mp3Array;
 };
 
-API.get("/schedule", (_req, res) => {
-  const shows = JSON.stringify(getShows());
-  res.status(200).json(shows);
-});
-
-API.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (username === "nicholas" && password === "nicholas") {
-    res.json({ token: jwt.sign({ name: username }, jsonSecretKey) });
-  } else {
-    res.json({
-      token: "",
-      error: "Nice try!",
-    });
-  }
-});
-
 API.get("/system-information", (_req, res) => {
+  console.log("GET");
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
 
 API.delete("/system-information/:fileName", (req, res) => {
+  fs.readdirSync(musicPath).forEach((file) => {
+    if (file === req.params.fileName) {
+      fs.unlinkSync(`./music/${file}`);
+      console.log(`deleted ${file}`);
+    }
+  });
+  const shows = JSON.stringify(getShows());
+  station.start();
+  res.status(200).json(shows);
+});
+
+API.get("/", (_req, res) => {
+  const shows = JSON.stringify(getShows());
+  res.status(200).json(shows);
+});
+
+API.delete("/:fileName", (req, res) => {
   fs.readdirSync(musicPath).forEach((file) => {
     if (file === req.params.fileName) {
       fs.unlinkSync(`./music/${file}`);
@@ -161,16 +137,9 @@ API.post("/upload", (req, res) => {
   });
 });
 
-const station = new Station({
-  verbose: true,
-});
-
 // add folder to station
 station.addFolder(musicPath);
 
-// update currently playing track info
-// could use a socket here to send information to client
-// let currentTrack;
 station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   const currentTrackInformation = {
@@ -184,23 +153,11 @@ station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   scheduleSocket.emit("song-information", currentTrackInformation);
 });
 
-// station.on(PUBLIC_EVENTS.RESTART, () => {
-//   station.reorderPlaylist(SHUFFLE_METHODS.randomShuffle());
-// });
-
-// add this handler - otherwise any error will exit the process as unhandled
 station.on(PUBLIC_EVENTS.ERROR, console.error);
 
-// main stream route
 musicStream.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
-
-// just get the entire playlist
-// server.get("/controls/getPlaylist", (req, res) => {
-//   const plist = station.getPlaylist();
-//   res.json(plist);
-// });
 
 const hourlyChange = new schedule.RecurrenceRule();
 hourlyChange.minute = 0;
@@ -217,7 +174,7 @@ const deleteOldMessages = () => {
   const chat = fs.readFileSync("./data/chat.json");
   const parsedChat = JSON.parse(chat);
   const filteredChat = parsedChat.filter(
-    (message) => currentTimestamp - message.timestamp < 12 * millisecondsPerHour
+    (message) => currentTimestamp - message.timestamp < 1 * millisecondsPerHour
   );
   fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
   console.log("old messages deleted");
