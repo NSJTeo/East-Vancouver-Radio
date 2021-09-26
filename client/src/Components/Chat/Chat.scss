@@ -22,7 +22,8 @@
     border-top: 2px solid #404040;
     border-right: 2px solid #f4f4f4;
     border-bottom: 2px solid #f4f4f4;
-    padding: 0rem 0.2rem;
+    padding: 0.2rem;
+    padding-right: 0.5rem;
   }
   &__form {
     display: flex;
@@ -62,6 +63,7 @@
     margin-right: 0.2rem;
     resize: none;
     flex-grow: 1;
+    padding: 0.2rem;
   }
   &__message-input-button {
     background: none;

@@ -14,7 +14,7 @@ export default function ChatMessage(props) {
     minutes = "0" + minutes;
   }
   return (
-    <div>
+    <div className="chat-message__container">
       <p>
         ({hour}:{minutes}) {name} says:
       </p>

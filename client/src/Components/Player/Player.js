@@ -64,7 +64,7 @@ export default function Player(props) {
         />
         <PlayerHeader handlePlayerIconClick={handlePlayerIconClick} />
         {currentShow ? (
-          <p>
+          <p className="player__now-playing-text">
             Now Playing: {currentShow.title} by {currentShow.artist}
           </p>
         ) : (

@@ -19,6 +19,9 @@ router.post("/", (req, res) => {
   };
   const chat = fs.readFileSync("./data/chat.json");
   const parsedChat = JSON.parse(chat);
+  if (parsedChat.length > 100) {
+    parsedChat.shift();
+  }
   parsedChat.push(newMessage);
   fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
   // chatSocket.emit("send-chat-message", "hello");
