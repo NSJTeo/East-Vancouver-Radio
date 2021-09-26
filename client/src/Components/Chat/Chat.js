@@ -7,11 +7,17 @@ import Draggable from "react-draggable";
 import ChatHeader from "../ChatHeader/ChatHeader";
 
 export default function Chat(props) {
+  //
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
+  //
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(null);
   const [socket, setSocket] = useState(null);
-  console.log("render");
+  //
+  const messageEndRef = createRef();
+  const formRef = createRef();
+  const userRef = createRef();
+  //
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
       const messagesArray = response.data;
@@ -21,20 +27,13 @@ export default function Chat(props) {
       setMessages(sortedMessagesArray);
     });
   };
-  const messageEndRef = createRef();
-
   const scrollToBottom = () => {
-    console.log("scrolling to bottom");
     if (!messageEndRef.current) {
       return;
     }
     messageEndRef.current.scrollIntoView();
   };
-
-  useEffect(() => {
-    console.log("use effect");
-    const newSocket = io("http://localhost:3001");
-    setSocket(newSocket);
+  const getUsername = () => {
     let storedUsername = localStorage.getItem("username");
     if (storedUsername === "null") {
       storedUsername = null;
@@ -42,20 +41,10 @@ export default function Chat(props) {
     if (storedUsername) {
       const { username } = JSON.parse(storedUsername);
       setUsername(username);
+    } else {
+      setUsername(null);
     }
-    getChatMessages();
-    return () => newSocket.close();
-  }, []);
-
-  if (socket) {
-    socket.on("get-messages", (data) => {
-      getChatMessages();
-    });
-  }
-
-  const formRef = createRef();
-  const userRef = createRef();
-
+  };
   const handleClick = () => {
     const form = formRef.current;
     if (!form.message.value.trim()) {
@@ -93,6 +82,20 @@ export default function Chat(props) {
     localStorage.setItem("username", null);
     setUsername(null);
   };
+  //
+  useEffect(() => {
+    const newSocket = io("http://localhost:3001");
+    setSocket(newSocket);
+    getUsername();
+    getChatMessages();
+    return () => newSocket.close();
+  }, []);
+  // socket listener
+  if (socket) {
+    socket.on("get-messages", (data) => {
+      getChatMessages();
+    });
+  }
 
   return (
     <Draggable

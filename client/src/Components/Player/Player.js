@@ -5,36 +5,41 @@ import { io } from "socket.io-client";
 import PlayerHeader from "../PlayerHeader/PlayerHeader";
 
 export default function Player(props) {
-  const [muted, setMuted] = useState(false);
-  const [currentShow, setCurrentShow] = useState("");
-  const playerRef = createRef();
+  //
   const { playerOn, handlePlayerIconClick, activeWindow, setPlayerToActive } =
     props;
-
+  //
+  const [muted, setMuted] = useState(false);
+  const [currentShow, setCurrentShow] = useState("");
+  const [socket, setSocket] = useState(null);
+  //
+  const playerRef = createRef();
+  //
   const toggleMute = () => {
     setMuted(true);
   };
-
-  const socket = io("http://localhost:3002");
-  socket.on("song-information", (data) => {
-    setCurrentShow(data);
-  });
-
   const getCurrentShow = () => {
     axios.get("http://localhost:8081/current-show").then((response) => {
       setCurrentShow(response.data);
     });
   };
-
-  useEffect(() => {
-    getCurrentShow();
-    playerRef.current.play();
-  }, []);
-
   const playAudio = () => {
     setMuted(false);
     playerRef.current.play();
   };
+  //
+  useEffect(() => {
+    const newSocket = io("http://localhost:3002");
+    setSocket(newSocket);
+    getCurrentShow();
+    playerRef.current.play();
+  }, []);
+
+  if (socket) {
+    socket.on("song-information", (data) => {
+      setCurrentShow(data);
+    });
+  }
 
   return (
     <Draggable

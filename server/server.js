@@ -19,13 +19,13 @@ const musicStream = express(); //musicStream
 const API = express(); //general API: chat log & music information
 
 // constants
+const musicPath = "./music";
 // express ports
 const radioPort = 8080; //radio station
 const apiPort = 8081; //chat REST
 // socket port
 const chatPort = 3001; //chat alert socket
 const schedulePort = 3002; //song update socket
-const musicPath = "./music";
 
 // chat socket
 const chatSocket = require("socket.io")(chatPort, {
@@ -52,6 +52,7 @@ API.use(express.json());
 API.use(cors({ origin: "*" }));
 API.use(express.static("public"));
 API.use(fileUpload());
+// JWT authentication
 const getToken = (req) => {
   return req.headers.authorization.split(" ")[1];
 };

@@ -2,7 +2,9 @@ import React from "react";
 import closeIcon from "../../assets/icons/close-icon.png";
 
 export default function ChatHeader(props) {
+  //
   const { username, handleChatIconClick } = props;
+  //
   return (
     <div className="chat-header__container">
       <div className="chat-header__grabbable">

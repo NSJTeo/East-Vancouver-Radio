@@ -4,8 +4,10 @@ import chatIcon from "../../assets/icons/chat-icon2.png";
 import setupIcon from "../../assets/icons/setupIcon.png";
 
 export default function Desktop(props) {
+  //
   const { handlePlayerIconClick, handleChatIconClick, handleSetupIconClick } =
     props;
+  //
   return (
     <div>
       <button className="desktop__shortcut" onClick={handlePlayerIconClick}>

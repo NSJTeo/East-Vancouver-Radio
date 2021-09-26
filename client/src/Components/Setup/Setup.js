@@ -6,12 +6,15 @@ import SetupInfo from "../SetupInfo/SetupInfo";
 import SetupHeader from "../SetupHeader/SetupHeader";
 
 export default function Setup(props) {
+  //
   const { setupOn, handleSetupIconClick, activeWindow, setSetupToActive } =
     props;
+  //
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState("");
-
+  //
   const formRef = createRef();
+  //
   const handleLogin = () => {
     const loginInfo = {
       username: formRef.current.username.value,

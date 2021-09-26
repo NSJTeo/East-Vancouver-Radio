@@ -2,7 +2,9 @@ import React from "react";
 import axios from "axios";
 
 export default function SetupFiles(props) {
+  //
   const { file, setFiles } = props;
+  //
   const handleDelete = () => {
     const token = sessionStorage.getItem("login");
     console.log("delete");
@@ -17,6 +19,7 @@ export default function SetupFiles(props) {
         setFiles(JSON.parse(response.data));
       });
   };
+
   return (
     <div className="setup-files__container">
       <p>{file}</p>

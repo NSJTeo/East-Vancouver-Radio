@@ -1,8 +1,9 @@
 import React from "react";
 
 export default function ChatMessage(props) {
+  //
   const { body, name, timestamp } = props;
-
+  //
   const commentTime = new Date(timestamp);
   let hour = commentTime.getHours().toString();
   if (hour.length === 1) {

@@ -3,29 +3,16 @@ import axios from "axios";
 import SetupFiles from "../SetupFiles/SetupFiles";
 
 export default function SetupInfo() {
+  //
   const [files, setFiles] = useState([]);
   const [fileToUpload, setFileToUpload] = useState(null);
-
+  //
   const uploadRef = createRef();
-
-  useEffect(() => {
-    const token = sessionStorage.getItem("login");
-    axios
-      .get("http://localhost:8081/system-information", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setFiles(JSON.parse(response.data));
-      });
-  }, []);
-
+  //
   const handleInput = (event) => {
     setFileToUpload(event.target.files[0]);
   };
   const uploadFileForm = document.getElementById("upload-file-form");
-
   const handleUpload = () => {
     const token = sessionStorage.getItem("login");
     const data = new FormData();
@@ -42,6 +29,19 @@ export default function SetupInfo() {
         uploadFileForm.reset();
       });
   };
+  //
+  useEffect(() => {
+    const token = sessionStorage.getItem("login");
+    axios
+      .get("http://localhost:8081/system-information", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setFiles(JSON.parse(response.data));
+      });
+  }, []);
 
   return (
     <>
