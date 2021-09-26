@@ -10,7 +10,8 @@ export default function Chat(props) {
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
   const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState(null);
-
+  const [socket, setSocket] = useState(null);
+  console.log("render");
   const getChatMessages = () => {
     axios.get("http://localhost:8081/chat").then((response) => {
       const messagesArray = response.data;
@@ -31,7 +32,9 @@ export default function Chat(props) {
   };
 
   useEffect(() => {
-    // const { username } = JSON.parse(localStorage.getItem("username"));
+    console.log("use effect");
+    const newSocket = io("http://localhost:3001");
+    setSocket(newSocket);
     let storedUsername = localStorage.getItem("username");
     if (storedUsername === "null") {
       storedUsername = null;
@@ -41,12 +44,14 @@ export default function Chat(props) {
       setUsername(username);
     }
     getChatMessages();
+    return () => newSocket.close();
   }, []);
 
-  const socket = io("http://localhost:3001");
-  socket.on("chat-message", (data) => {
-    getChatMessages();
-  });
+  if (socket) {
+    socket.on("get-messages", (data) => {
+      getChatMessages();
+    });
+  }
 
   const formRef = createRef();
   const userRef = createRef();
@@ -56,15 +61,19 @@ export default function Chat(props) {
     if (!form.message.value.trim()) {
       return;
     }
-    socket.emit("send-chat-message", form.message.value);
     const newMessage = {
       name: username,
       body: form.message.value,
     };
 
     axios.post("http://localhost:8081/chat", newMessage).then((response) => {
-      getChatMessages();
+      const messagesArray = JSON.parse(response.data);
+      const sortedMessagesArray = messagesArray.sort((message1, message2) => {
+        return message1.timestamp - message2.timestamp;
+      });
+      setMessages(sortedMessagesArray);
       form.reset();
+      socket.emit("send-chat-message", "hello");
       scrollToBottom();
     });
   };

@@ -30,19 +30,20 @@ const musicPath = "./music";
 // chat socket
 const chatSocket = require("socket.io")(chatPort, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
   },
 });
 // schedule update socket
 const scheduleSocket = require("socket.io")(schedulePort, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
   },
 });
 
 chatSocket.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
-    socket.broadcast.emit("chat-message", message);
+    console.log(message);
+    socket.broadcast.emit("get-messages", message);
   });
 });
 
@@ -93,7 +94,8 @@ API.get("/chat", (_req, res) => {
   const parsedChat = JSON.parse(chat);
   parsedChat.push(newMessage);
   fs.writeFileSync("./data/chat.json", JSON.stringify(parsedChat));
-  res.status(200).json({ Success: true });
+  // chatSocket.emit("send-chat-message", "hello");
+  res.status(200).json(JSON.stringify(parsedChat));
 });
 
 API.get("/current-show", (_req, res) => {
