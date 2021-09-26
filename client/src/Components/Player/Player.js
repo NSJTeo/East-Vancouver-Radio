@@ -19,9 +19,14 @@ export default function Player(props) {
     setMuted(true);
   };
   const getCurrentShow = () => {
-    axios.get("http://localhost:8081/current-show").then((response) => {
-      setCurrentShow(response.data);
-    });
+    axios
+      .get("http://localhost:8081/current-show")
+      .then((response) => {
+        setCurrentShow(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const playAudio = () => {
     setMuted(false);

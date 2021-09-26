@@ -19,13 +19,18 @@ export default function Chat(props) {
   const userRef = createRef();
   //
   const getChatMessages = () => {
-    axios.get("http://localhost:8081/chat").then((response) => {
-      const messagesArray = response.data;
-      const sortedMessagesArray = messagesArray.sort((message1, message2) => {
-        return message1.timestamp - message2.timestamp;
+    axios
+      .get("http://localhost:8081/chat")
+      .then((response) => {
+        const messagesArray = response.data;
+        const sortedMessagesArray = messagesArray.sort((message1, message2) => {
+          return message1.timestamp - message2.timestamp;
+        });
+        setMessages(sortedMessagesArray);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      setMessages(sortedMessagesArray);
-    });
   };
   const scrollToBottom = () => {
     if (!messageEndRef.current) {
@@ -59,16 +64,21 @@ export default function Chat(props) {
       body: form.message.value,
     };
 
-    axios.post("http://localhost:8081/chat", newMessage).then((response) => {
-      const messagesArray = JSON.parse(response.data);
-      const sortedMessagesArray = messagesArray.sort((message1, message2) => {
-        return message1.timestamp - message2.timestamp;
+    axios
+      .post("http://localhost:8081/chat", newMessage)
+      .then((response) => {
+        const messagesArray = JSON.parse(response.data);
+        const sortedMessagesArray = messagesArray.sort((message1, message2) => {
+          return message1.timestamp - message2.timestamp;
+        });
+        setMessages(sortedMessagesArray);
+        form.reset();
+        socket.emit("send-chat-message", "hello");
+        scrollToBottom();
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      setMessages(sortedMessagesArray);
-      form.reset();
-      socket.emit("send-chat-message", "hello");
-      scrollToBottom();
-    });
   };
 
   const handleUsername = () => {

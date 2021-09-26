@@ -11,7 +11,7 @@ export default function Setup(props) {
     props;
   //
   const [loggedIn, setLoggedIn] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   //
   const formRef = createRef();
   //
@@ -20,18 +20,22 @@ export default function Setup(props) {
       username: formRef.current.username.value,
       password: formRef.current.password.value,
     };
-    axios.post("http://localhost:8081/login", loginInfo).then((response) => {
-      if (response.data.error) {
+    axios
+      .post("http://localhost:8081/login", loginInfo)
+      .then((response) => {
+        sessionStorage.setItem("login", response.data.token);
         formRef.current.reset();
-        setError(response.data.error);
-        return;
-      }
-      sessionStorage.setItem("login", response.data.token);
-      formRef.current.reset();
-      setError("");
-      setLoggedIn(true);
-    });
+        setError(false);
+        setLoggedIn(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        formRef.current.reset();
+        setError(true);
+        setLoggedIn(false);
+      });
   };
+  console.log(loggedIn);
   return (
     <Draggable
       allowAnyClick={false}
@@ -70,7 +74,7 @@ export default function Setup(props) {
                 Login
               </button>
             </form>
-            {error && <p>{error}</p>}
+            {error && <p>Try again.</p>}
           </>
         )}
       </div>
