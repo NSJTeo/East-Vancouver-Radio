@@ -8,8 +8,10 @@ const jwt = require("jsonwebtoken");
 const fileUpload = require("express-fileupload");
 // routers
 const chatRouter = require("./routes/chat.js");
-const currentShowRouter = require("./routes/currentShow.js");
-const loginRouter = require("./routes/login.js");
+const currentShowRouter = require("./routes/currentShow");
+const loginRouter = require("./routes/login");
+const deleteOldMessages = require("./utils/deleteOldMessages");
+const getShows = require("./utils/getShows");
 
 // express setup
 const musicStream = express(); //musicStream
@@ -19,7 +21,7 @@ const API = express(); //general API: chat log & music information
 const musicPath = "./music";
 // express ports
 const radioPort = 8080; //radio station
-const apiPort = 8081; //chat REST
+const apiPort = 8081; //API
 // socket port
 const chatPort = 3001; //chat alert socket
 const schedulePort = 3002; //song update socket
@@ -43,7 +45,6 @@ const station = new Station({
 
 chatSocket.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
-    console.log(message);
     socket.broadcast.emit("get-messages", message);
   });
 });
@@ -79,38 +80,20 @@ API.use((req, res, next) => {
   }
 });
 
-const getShows = () => {
-  let mp3Array = [];
-  fs.readdirSync(musicPath).forEach((file) => {
-    mp3Array.push(file);
-  });
-  return mp3Array;
-};
+// const getShows = () => {
+//   let mp3Array = [];
+//   fs.readdirSync(musicPath).forEach((file) => {
+//     mp3Array.push(file);
+//   });
+//   return mp3Array;
+// };
 
 API.get("/system-information", (_req, res) => {
-  console.log("GET");
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
 
 API.delete("/system-information/:fileName", (req, res) => {
-  fs.readdirSync(musicPath).forEach((file) => {
-    if (file === req.params.fileName) {
-      fs.unlinkSync(`./music/${file}`);
-      console.log(`deleted ${file}`);
-    }
-  });
-  const shows = JSON.stringify(getShows());
-  station.start();
-  res.status(200).json(shows);
-});
-
-API.get("/", (_req, res) => {
-  const shows = JSON.stringify(getShows());
-  res.status(200).json(shows);
-});
-
-API.delete("/:fileName", (req, res) => {
   fs.readdirSync(musicPath).forEach((file) => {
     if (file === req.params.fileName) {
       fs.unlinkSync(`./music/${file}`);
@@ -167,18 +150,19 @@ schedule.scheduleJob(hourlyChange, () => {
   console.log("scheduled change");
 });
 
-const deleteOldMessages = () => {
-  const currentTime = new Date();
-  const currentTimestamp = currentTime.getTime();
-  const millisecondsPerHour = 3600000;
-  const chat = fs.readFileSync("./data/chat.json");
-  const parsedChat = JSON.parse(chat);
-  const filteredChat = parsedChat.filter(
-    (message) => currentTimestamp - message.timestamp < 1 * millisecondsPerHour
-  );
-  fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
-  console.log("old messages deleted");
-};
+// const deleteOldMessages = () => {
+//   const currentTime = new Date();
+//   const currentTimestamp = currentTime.getTime();
+//   const millisecondsPerHour = 3600000;
+//   const chat = fs.readFileSync("./data/chat.json");
+//   const parsedChat = JSON.parse(chat);
+//   const filteredChat = parsedChat.filter(
+//     (message) => currentTimestamp - message.timestamp < 1 * millisecondsPerHour
+//   );
+//   fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
+//   chatSocket.emit("send-chat-message", "delete old comments");
+//   console.log("old messages deleted");
+// };
 
 musicStream.listen(radioPort, () => {
   console.log(`RADIO APP IS AVAILABLE ON http://localhost:${radioPort}`);

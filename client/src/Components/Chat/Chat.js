@@ -50,6 +50,10 @@ export default function Chat(props) {
     if (!form.message.value.trim()) {
       return;
     }
+    if (form.message.value.length > 300) {
+      form.reset();
+      return;
+    }
     const newMessage = {
       name: username,
       body: form.message.value,
@@ -148,6 +152,7 @@ export default function Chat(props) {
                 placeholder="Select username"
                 autoComplete="off"
               />
+              <input className="chat__hidden-input" />
               <button
                 className="chat__username-input-button"
                 type="button"
