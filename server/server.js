@@ -158,7 +158,7 @@ app.get("/stream", (req, res) => {
 const hourlyChange = new schedule.RecurrenceRule();
 hourlyChange.minute = 0;
 schedule.scheduleJob(hourlyChange, () => {
-  deleteOldMessages();
+  // deleteOldMessages();
   station.next();
   console.log("scheduled change");
   socket.emit("get-messages", "delete old messages");
