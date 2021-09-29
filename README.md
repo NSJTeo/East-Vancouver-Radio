@@ -18,17 +18,17 @@ Also the player will use mp3's ID3 tags to populate the show information, so mak
 
 First, let's make sure the server is ready. Open up your terminal and input the following:
 
-`cd server`
-`npm i`
-`npm start`
+> cd server
+> npm i
+> npm start
 
 You should get a console log indicating the port that the server is listening on, as well as a "Station started" notification. It's time to listen to the stream.
 
 In a separate instance of terminal:
 
-`cd client`
-`npm i` (this one might take a minute or two)
-`npm start`
+> cd client
+> npm i
+> npm start
 
 If React's working right, your browser should open to http://localhost:3000/.
 
