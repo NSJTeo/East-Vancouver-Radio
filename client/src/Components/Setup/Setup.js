@@ -23,6 +23,7 @@ export default function Setup(props) {
     axios
       .post("http://localhost:8081/login", loginInfo)
       .then((response) => {
+        console.log("token: ", response.data.token);
         sessionStorage.setItem("login", response.data.token);
         formRef.current.reset();
         setError(false);
@@ -39,12 +40,14 @@ export default function Setup(props) {
     <Draggable
       allowAnyClick={false}
       bounds="parent"
-      handle=".setup__header-grabbable"
+      handle=".setup-header__grabbable"
     >
       <div
         className={`setup__container ${
           setupOn ? "" : "setup__container--hidden"
-        } ${"setup" === activeWindow ? "active" : ""}`}
+        } ${loggedIn ? "setup__logged-in" : ""} ${
+          "setup" === activeWindow ? "active" : ""
+        }`}
         onMouseDownCapture={() => setSetupToActive()}
       >
         <SetupHeader handleSetupIconClick={handleSetupIconClick} />
@@ -52,7 +55,7 @@ export default function Setup(props) {
           <SetupInfo />
         ) : (
           <>
-            <form ref={formRef}>
+            <form className="setup__form" ref={formRef}>
               <div className="setup__label-input-container">
                 <label className="setup__login-label">Username</label>
                 <input className="setup__login-input" name="username" />

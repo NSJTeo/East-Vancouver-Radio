@@ -1,70 +1,16 @@
+@use "../../partials/mixins.scss" as *;
+
 .setup {
   &__container {
-    position: absolute;
-    width: 45vw;
-    background-color: #c6c6c6;
-    border-top: 2px solid #efefef;
-    border-left: 2px solid #efefef;
-    border-right: 2px solid #000;
-    border-bottom: 2px solid #000;
-    padding: 0.15rem;
+    width: 15rem;
     top: 10%;
     left: 40%;
-    &--hidden {
-      display: none;
-    }
-  }
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0.25rem;
-    height: 1.5rem;
-    line-height: 1.4;
-    background: navy;
-  }
-  &__header-grabbable {
-    color: white;
-    flex-grow: 1;
-    &:hover {
-      cursor: grab;
-    }
-  }
-  &__close-button {
-    width: 1rem;
-    height: 1rem;
-    border-left: 2px solid #ededed;
-    border-top: 2px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 2px solid #ededed;
-      border-bottom: 2px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
+    @include window-container;
   }
   &__button {
-    background: none;
     margin-top: 0.2rem;
     margin-right: 0.1rem;
-    padding: 0.25rem;
-    border-left: 1px solid #ededed;
-    border-top: 1px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 1px solid #ededed;
-      border-bottom: 1px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
+    @include general-button;
   }
   &__label-input-container {
     display: flex;
@@ -75,12 +21,14 @@
     width: 4.5rem;
   }
   &__login-input {
-    border-left: 2px solid #404040;
-    border-top: 2px solid #404040;
-    border-right: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
-    margin-right: 0.2rem;
+    @include text-window;
     resize: none;
     flex-grow: 1;
+  }
+  &__form {
+    padding-top: 0.2rem;
+  }
+  &__logged-in {
+    width: 25rem;
   }
 }
