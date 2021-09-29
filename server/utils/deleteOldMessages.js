@@ -9,7 +9,7 @@ const deleteOldMessages = () => {
     const parsedChat = JSON.parse(chat);
     const filteredChat = parsedChat.filter(
       (message) =>
-        currentTimestamp - message.timestamp < 1 * millisecondsPerHour
+        currentTimestamp - message.timestamp < 12 * millisecondsPerHour
     );
     fs.writeFileSync("./data/chat.json", JSON.stringify(filteredChat));
     console.log("old messages deleted");
