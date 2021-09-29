@@ -9,7 +9,7 @@ export default function SetupFiles(props) {
     const token = sessionStorage.getItem("login");
     console.log("delete");
     axios
-      .delete(`http://localhost:8081/system-information/${file}`, {
+      .delete(`http://localhost:8080/system-information/${file}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

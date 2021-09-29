@@ -21,7 +21,7 @@ export default function Player(props) {
   };
   const getCurrentShow = () => {
     axios
-      .get("http://localhost:8081/current-show")
+      .get("http://localhost:8080/current-show")
       .then((response) => {
         setCurrentShow(response.data);
       })
@@ -35,7 +35,7 @@ export default function Player(props) {
   };
   //
   useEffect(() => {
-    const newSocket = io("http://localhost:3002");
+    const newSocket = io("http://localhost:8080");
     setSocket(newSocket);
     getCurrentShow();
     playerRef.current.play();

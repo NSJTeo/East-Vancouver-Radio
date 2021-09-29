@@ -21,7 +21,7 @@ export default function Chat(props) {
   //
   const getChatMessages = () => {
     axios
-      .get("http://localhost:8081/chat")
+      .get("http://localhost:8080/chat")
       .then((response) => {
         const messagesArray = response.data;
         const sortedMessagesArray = messagesArray.sort((message1, message2) => {
@@ -66,7 +66,7 @@ export default function Chat(props) {
     };
 
     axios
-      .post("http://localhost:8081/chat", newMessage)
+      .post("http://localhost:8080/chat", newMessage)
       .then((response) => {
         const messagesArray = JSON.parse(response.data);
         const sortedMessagesArray = messagesArray.sort((message1, message2) => {
@@ -99,7 +99,7 @@ export default function Chat(props) {
   };
   //
   useEffect(() => {
-    const newSocket = io("http://localhost:8081/chat");
+    const newSocket = io("http://localhost:8080");
     setSocket(newSocket);
     getUsername();
     getChatMessages();

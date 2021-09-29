@@ -18,7 +18,7 @@ export default function SetupInfo() {
     const data = new FormData();
     data.append("file", fileToUpload);
     axios
-      .post("http://localhost:8081/upload", data, {
+      .post("http://localhost:8080/upload", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -36,7 +36,7 @@ export default function SetupInfo() {
   useEffect(() => {
     const token = sessionStorage.getItem("login");
     axios
-      .get("http://localhost:8081/system-information", {
+      .get("http://localhost:8080/system-information", {
         headers: {
           authorization: `Bearer ${token}`,
         },
