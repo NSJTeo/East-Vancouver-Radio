@@ -1,109 +1,46 @@
+@use "../../partials/mixins.scss" as *;
+
 .chat {
   &__container {
-    position: absolute;
-    width: 45vw;
-    background-color: #c6c6c6;
-    border-top: 2px solid #efefef;
-    border-left: 2px solid #efefef;
-    border-right: 2px solid #000;
-    border-bottom: 2px solid #000;
-    padding: 0.15rem;
-    top: 30%;
-    left: 30%;
-    &--hidden {
-      display: none;
-    }
+    width: 35rem;
+    top: 40%;
+    left: 20%;
+    @include window-container;
   }
   &__window {
     background-color: white;
     height: 10rem;
     overflow-y: scroll;
-    border-left: 2px solid #404040;
-    border-top: 2px solid #404040;
-    border-right: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
-    padding: 0.2rem;
+    @include text-window;
     padding-right: 0.5rem;
   }
   &__form {
     display: flex;
   }
   &__username-input {
-    border-left: 2px solid #404040;
-    border-top: 2px solid #404040;
-    border-right: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
+    @include text-window;
     margin-right: 0.25rem;
     flex-grow: 1;
-    padding: 0.2rem;
   }
   &__username-input-button {
-    background: none;
-    padding: 0.25rem;
-    border-left: 1px solid #ededed;
-    border-top: 1px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 1px solid #ededed;
-      border-bottom: 1px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
+    @include general-button;
   }
   &__message-input {
-    border-left: 2px solid #404040;
-    border-top: 2px solid #404040;
-    border-right: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
+    @include text-window;
     margin-right: 0.2rem;
     resize: none;
     flex-grow: 1;
-    padding: 0.2rem;
   }
   &__message-input-button {
-    background: none;
+    @include general-button;
     padding: 1rem;
-    border-left: 1px solid #ededed;
-    border-top: 1px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 1px solid #ededed;
-      border-bottom: 1px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
   }
   &__message-container {
     padding-top: 0.2rem;
   }
   &__logout-button {
-    background: none;
     margin-top: 0.2rem;
-    padding: 0.25rem;
-    border-left: 1px solid #ededed;
-    border-top: 1px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    // box-shadow: inset 1px 1px #dfdfdf, 1px 0 #000, 0 1px #000, 1px 1px #000;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 1px solid #ededed;
-      border-bottom: 1px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
+    @include general-button;
   }
   &__hidden-input {
     display: none;

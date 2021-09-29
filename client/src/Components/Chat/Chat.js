@@ -1,11 +1,3 @@
-import React, { createRef, useState, useEffect } from "react";
-import { io } from "socket.io-client";
-import axios from "axios";
-import ChatMessage from "../ChatMessage/ChatMessage";
-// import closeIcon from "../../assets/icons/close-icon.png";
-import Draggable from "react-draggable";
-import ChatHeader from "../ChatHeader/ChatHeader";
-
 export default function Chat(props) {
   //
   const { chatOn, handleChatIconClick, activeWindow, setChatToActive } = props;
@@ -98,7 +90,7 @@ export default function Chat(props) {
   };
   //
   useEffect(() => {
-    const newSocket = io("http://localhost:3001");
+    const newSocket = io("http://localhost:8081/chat");
     setSocket(newSocket);
     getUsername();
     getChatMessages();
