@@ -1,35 +1,13 @@
+@use "../../partials/mixins.scss" as *;
+
 .chat-header {
   &__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0.25rem;
-    height: 1.5rem;
-    line-height: 1.4;
-    background: navy;
+    @include header-container;
   }
   &__grabbable {
-    color: white;
-    flex-grow: 1;
-    &:hover {
-      cursor: grab;
-    }
+    @include header-grabbable;
   }
   &__close-button {
-    width: 1rem;
-    height: 1rem;
-    border-left: 2px solid #ededed;
-    border-top: 2px solid #ededed;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
-    &:hover {
-      cursor: pointer;
-    }
-    &:active {
-      border-right: 2px solid #ededed;
-      border-bottom: 2px solid #ededed;
-      border-left: 2px solid #404040;
-      border-top: 2px solid #404040;
-    }
+    @include close-button;
   }
 }
