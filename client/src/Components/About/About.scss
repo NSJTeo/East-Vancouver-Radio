@@ -1,0 +1,14 @@
+@use "../../partials/mixins.scss" as *;
+
+.about {
+  &__container {
+    width: 25rem;
+    top: 30%;
+    left: 30%;
+    @include window-container;
+  }
+  &__main {
+    padding-bottom: 0.2rem;
+    padding-top: 0.4rem;
+  }
+}
