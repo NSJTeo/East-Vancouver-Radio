@@ -23,7 +23,6 @@ export default function Setup(props) {
     axios
       .post("http://localhost:8080/login", loginInfo)
       .then((response) => {
-        console.log("token: ", response.data.token);
         sessionStorage.setItem("login", response.data.token);
         formRef.current.reset();
         setError(false);

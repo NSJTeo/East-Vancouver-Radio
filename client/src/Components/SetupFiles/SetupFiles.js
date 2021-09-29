@@ -7,7 +7,6 @@ export default function SetupFiles(props) {
   //
   const handleDelete = () => {
     const token = sessionStorage.getItem("login");
-    console.log("delete");
     axios
       .delete(`http://localhost:8080/system-information/${file}`, {
         headers: {
@@ -15,7 +14,6 @@ export default function SetupFiles(props) {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setFiles(JSON.parse(response.data));
       })
       .catch((error) => {

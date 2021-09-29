@@ -93,7 +93,6 @@ export default function Chat(props) {
   };
 
   const handleLogout = () => {
-    console.log("logged out");
     localStorage.setItem("username", null);
     setUsername(null);
   };
