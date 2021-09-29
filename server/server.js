@@ -12,30 +12,19 @@ const currentShowRouter = require("./routes/currentShow");
 const loginRouter = require("./routes/login");
 const deleteOldMessages = require("./utils/deleteOldMessages");
 const getShows = require("./utils/getShows");
-
 // express setup
-const musicStream = express(); //musicStream
-const API = express(); //general API: chat log & music information
+const app = require("express")();
+const server = require("http").createServer(app);
 
 // constants
 const musicPath = "./music";
 // express ports
-const radioPort = 8080; //radio station
-const apiPort = 8081; //API
-// socket port
-const chatPort = 3001; //chat alert socket
-const schedulePort = 3002; //song update socket
+const PORT = process.env.PORT || 8080; //radio station
 
 // chat socket
-const chatSocket = require("socket.io")(chatPort, {
+const socket = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
-  },
-});
-// schedule update socket
-const scheduleSocket = require("socket.io")(schedulePort, {
-  cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 
@@ -43,27 +32,34 @@ const station = new Station({
   verbose: true,
 });
 
-chatSocket.on("connection", (socket) => {
+socket.on("connection", (socket) => {
   socket.on("send-chat-message", (message) => {
     socket.broadcast.emit("get-messages", message);
   });
 });
 
 // middleware
-API.use(express.json());
-API.use(cors({ origin: "*" }));
-API.use(express.static("public"));
-API.use(fileUpload());
-API.use("/chat", chatRouter);
-API.use("/current-show", currentShowRouter);
-API.use("/login", loginRouter);
+app.use(express.json());
+app.use(cors({ origin: "*" }));
+app.use(express.static("public"));
+app.use(fileUpload());
+app.use("/chat", chatRouter);
+app.use("/current-show", currentShowRouter);
+app.use("/login", loginRouter);
 // JWT authentication
 const jsonSecretKey = "eastvancouver";
 const getToken = (req) => {
   return req.headers.authorization.split(" ")[1];
 };
-API.use((req, res, next) => {
-  const publicURLs = ["/schedule", "/login", "/chat", "/current-show"];
+app.use((req, res, next) => {
+  const publicURLs = [
+    "/",
+    "/stream",
+    "/schedule",
+    "/login",
+    "/chat",
+    "/current-show",
+  ];
   if (publicURLs.includes(req.url)) next();
   else {
     const token = getToken(req);
@@ -80,14 +76,29 @@ API.use((req, res, next) => {
   }
 });
 
-API.get("/system-information", (_req, res) => {
+app.get("/chat", (_req, res) => {
+  try {
+    const chat = fs.readFileSync("./data/chat.json");
+    const parsedChat = JSON.parse(chat);
+    res.status(200).json(parsedChat);
+  } catch {
+    res.status(404).send();
+  }
+});
+
+app.get("/system-information", (_req, res) => {
   const shows = JSON.stringify(getShows());
   res.status(200).json(shows);
 });
 
-API.delete("/system-information/:fileName", (req, res) => {
+app.delete("/system-information/:fileName", (req, res) => {
   try {
-    fs.readdirSync(musicPath).forEach((file) => {
+    const library = fs.readdirSync(musicPath);
+    // prevents user from deleting the last song in the library
+    if (library.length < 2) {
+      return;
+    }
+    library.forEach((file) => {
       if (file === req.params.fileName) {
         fs.unlinkSync(`./music/${file}`);
         console.log(`deleted ${file}`);
@@ -102,7 +113,7 @@ API.delete("/system-information/:fileName", (req, res) => {
   }
 });
 
-API.post("/upload", (req, res) => {
+app.post("/upload", (req, res) => {
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
@@ -127,35 +138,33 @@ station.addFolder(musicPath);
 station.on(PUBLIC_EVENTS.NEXT_TRACK, async (track) => {
   const result = await track.getMetaAsync();
   const currentTrackInformation = {
-    title: result.title || "Mystery Show",
-    artist: result.artist || "Mystery Host",
+    title: result.title || "DJ Mix",
+    artist: result.artist || "Mystery DJ",
   };
   fs.writeFileSync(
     "./data/currentSong.json",
     JSON.stringify(currentTrackInformation)
   );
-  scheduleSocket.emit("song-information", currentTrackInformation);
+  socket.emit("song-information", currentTrackInformation);
 });
 
 station.on(PUBLIC_EVENTS.ERROR, console.error);
 
-musicStream.get("/stream", (req, res) => {
+app.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
 
+// This will play the next track every hour.
 const hourlyChange = new schedule.RecurrenceRule();
 hourlyChange.minute = 0;
 schedule.scheduleJob(hourlyChange, () => {
   deleteOldMessages();
   station.next();
   console.log("scheduled change");
+  socket.emit("get-messages", "delete old messages");
 });
 
-musicStream.listen(radioPort, () => {
-  console.log(`RADIO APP IS AVAILABLE ON http://localhost:${radioPort}`);
+server.listen(PORT, () => {
+  console.log(`Listening on ${PORT}`);
   station.start();
-});
-
-API.listen(apiPort, () => {
-  console.log("second server is listening");
 });
