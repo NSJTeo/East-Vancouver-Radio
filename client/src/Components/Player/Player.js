@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import axios from "axios";
 import { io } from "socket.io-client";
 import PlayerHeader from "../PlayerHeader/PlayerHeader";
+import AudioSpectrum from "react-audio-spectrum";
 
 export default function Player(props) {
   //
@@ -38,6 +39,7 @@ export default function Player(props) {
     setSocket(newSocket);
     getCurrentShow();
     playerRef.current.play();
+    return () => newSocket.close();
   }, []);
 
   if (socket) {
@@ -50,7 +52,7 @@ export default function Player(props) {
     <Draggable
       allowAnyClick={false}
       bounds="parent"
-      handle=".player__header-grabbable"
+      handle=".player-header__grabbable"
     >
       <div
         className={`player__container ${
@@ -66,6 +68,7 @@ export default function Player(props) {
           muted={muted}
           controls
           className="player__container--hidden"
+          crossOrigin="anonymous"
         />
         <PlayerHeader handlePlayerIconClick={handlePlayerIconClick} />
         {currentShow ? (
@@ -73,8 +76,27 @@ export default function Player(props) {
             Now Playing: {currentShow.title} by {currentShow.artist}
           </p>
         ) : (
-          <p>Off-Air</p>
+          <p className="player__now-playing-text">Off-Air</p>
         )}
+        <div className="player__visualizer">
+          <AudioSpectrum
+            id="audio-canvas"
+            height={175}
+            width={230}
+            audioId={"audio-player"}
+            capColor={"red"}
+            capHeight={2}
+            meterWidth={10}
+            meterCount={200}
+            meterColor={[
+              { stop: 0, color: "blue" },
+              { stop: 0.5, color: "blue" },
+              { stop: 1, color: "blue" },
+            ]}
+            gap={4}
+            crossOrigin="anonymous"
+          />
+        </div>
         <div className="player__buttons">
           <button className="player__button" type="button" onClick={toggleMute}>
             Pause
