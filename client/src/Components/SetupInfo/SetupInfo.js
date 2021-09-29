@@ -38,7 +38,7 @@ export default function SetupInfo() {
     axios
       .get("http://localhost:8081/system-information", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
