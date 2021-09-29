@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# Welcome to East Vancouver Radio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+"I'm too broke for Airtime.pro & Shoutcast. I'm too dumb to deploy Icecast on Windows." - Me
 
-## Available Scripts
+This project will allow you to run a local Node.js-based radio-streaming server: all you gotta do is import your music, install some dependencies and voila. There's also a little Windows 95/98-themed client I made for exploring the server's current functionality. The client has a socket.io-based chat room and basic file management system (upload & delete). Currently the chat log is based on JSON, which means it gets overwhelmed pretty easy. My next step is to move this over to MongoDB. Wish me luck!
 
-In the project directory, you can run:
+You can visit a demo [here](http://sleepy-dusk-99333.herokuapp.com/). I'm on the free-tier so please excuse the slow startup.
 
-### `npm start`
+One thing to note is that I tailored this for the DJ experience: as an ex-"radio manager" myself, I like to give everyone a one hour slot to do their thing. The server will automatically stream the next file whenever one finishes, but I've added some code that will force the server to play the next file at the top of every hour (node-schedule), even in the middle of songs.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The website & concept work best when you feed the server mixes that last just a bit over an hour.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Setting it all up
 
-### `npm test`
+The first thing to do is put some music into the server. Drag & drop your favourite mp3s into `East-Vancouver-Radio-main/server/music` and you're good to go. If you're hosting locally, 320kbps mp3s are probably ideal, but when deploying, 128kbps is more bandwidth-friendly. This thing handles variable mp3 bitrates but I'm not sure how it's going to handle .wav or .aiff or other music file types: be sure to let me know if you try!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Also the player will use mp3's ID3 tags to populate the show information, so make sure those are up to date!
 
-### `npm run build`
+First, let's make sure the server is ready. Open up your terminal and input the following:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`cd server`
+`npm i`
+`npm start`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You should get a console log indicating the port that the server is listening on, as well as a "Station started" notification. It's time to listen to the stream.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In a separate instance of terminal:
 
-### `npm run eject`
+`cd client`
+`npm i` (this one might take a minute or two)
+`npm start`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+If React's working right, your browser should open to http://localhost:3000/.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Happy listening!
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Client-side file management
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+"Why is there client-side file management?" Yes, sorry, this is purely for demonstrative purposes. You can give it a shot yourself though! In the client, open up the "Setup" window by clicking one of the Setup icons.
 
-## Learn More
+Username is _user_ and password is _user_. While I'd love to hear your selections, this password combination won't work on the heroku deployment.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+If the whole process worked out, you should see a list of the mp3s in your music folder. Please do not delete the currently playing track! If you need to delete it from the client-side while the server is running, upload another song and wait for it to finish playing.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+As for uploading... I'm working on implementing some visual cues for the process but when you upload, **wait for your file to populate the mp3 list.** That's a sure sign that it's been fully uploaded to the server.
 
-### Code Splitting
+## Scheduling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The scheduling is a bit limited, I'll admit. Node is going to read the music folder files in alphanumerical order, so before you upload the "first" song in the schedule, prepend it with a 01, like `01-your-first-song.mp3` and then prepend the second with 02 `02-your-second-song` etc etc. That's all I got for a workaround right now.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Thank you!

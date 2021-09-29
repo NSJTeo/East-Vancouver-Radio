@@ -108,7 +108,7 @@ app.delete("/system-information/:fileName", (req, res) => {
     console.log("Couldn't delete mp3");
   } finally {
     const shows = JSON.stringify(getShows());
-    station.start();
+    // station.start();
     res.status(200).json(shows);
   }
 });
@@ -124,7 +124,7 @@ app.post("/upload", (req, res) => {
         return res.status(500).send(err);
       }
       const shows = JSON.stringify(getShows());
-      station.start();
+      // station.start();
       res.status(200).json(shows);
     });
   } catch {
