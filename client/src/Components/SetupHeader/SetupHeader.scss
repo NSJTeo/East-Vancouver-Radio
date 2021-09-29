@@ -1,0 +1,13 @@
+@use "../../partials/mixins.scss" as *;
+
+.setup-header {
+  &__container {
+    @include header-container;
+  }
+  &__grabbable {
+    @include header-grabbable;
+  }
+  &__close-button {
+    @include close-button;
+  }
+}
