@@ -2,11 +2,16 @@ import React from "react";
 import playerIcon from "../../assets/icons/wm-5.png";
 import chatIcon from "../../assets/icons/chat-icon2.png";
 import setupIcon from "../../assets/icons/setupIcon.png";
+import aboutIcon from "../../assets/icons/help_book_cool-4.png";
 
 export default function Desktop(props) {
   //
-  const { handlePlayerIconClick, handleChatIconClick, handleSetupIconClick } =
-    props;
+  const {
+    handlePlayerIconClick,
+    handleChatIconClick,
+    handleSetupIconClick,
+    handleAboutIconClick,
+  } = props;
   //
   return (
     <div>
@@ -33,6 +38,10 @@ export default function Desktop(props) {
           alt="Globe on a folder"
         />
         <p>Setup</p>
+      </button>
+      <button className="desktop__shortcut" onClick={handleAboutIconClick}>
+        <img className="desktop__icon" src={aboutIcon} alt="..." />
+        <p>About</p>
       </button>
     </div>
   );
