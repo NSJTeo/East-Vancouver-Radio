@@ -2,7 +2,7 @@
 
 "I'm too broke for Airtime.pro & Shoutcast. I'm too dumb to deploy Icecast on Windows." - Me
 
-This project will allow you to run a local Node.js-based radio-streaming server: all you gotta do is import your music, install some dependencies and voila. There's also a little Windows 95/98-themed client I made for exploring the server's current functionality. The client has a socket.io-based chat room and basic file management system (upload & delete). Currently the chat log is based on JSON, which means it gets overwhelmed pretty easy. My next step is to move this over to MongoDB. Wish me luck!
+This project will allow you to run a local Node.js-based radio-streaming server: all you gotta do is import your music, install some dependencies and voila. There's also a little Windows 95/98-themed client I made for exploring the server's current functionality. The client has a socket.io-based chat room and basic file management system (upload & delete). This version of the app uses JSON to store chat data (the real deal uses MongoDB). 
 
 You can visit a demo [here](http://sleepy-dusk-99333.herokuapp.com/). I'm on the free-tier so please excuse the slow startup.
 
@@ -30,22 +30,20 @@ In a separate instance of terminal:
 - `npm i`
 - `npm start`
 
-If React's working right, your browser should open to http://localhost:3000/.
+If React's working right, your browser should open to http://localhost:3000/
 
 Happy listening!
 
 ## Client-side file management
 
-"Why is there client-side file management?" Yes, sorry, this is purely for demonstrative purposes. You can give it a shot yourself though! In the client, open up the "Setup" window by clicking one of the Setup icons.
+Username is _user_ and password is _user_
 
-Username is _user_ and password is _user_. While I'd love to hear your selections, this password combination won't work on the heroku deployment.
-
-If the whole process worked out, you should see a list of the mp3s in your music folder. Please do not delete the currently playing track! If you need to delete it from the client-side while the server is running, upload another song and wait for it to finish playing.
+If the whole process worked out, you should see a list of the mp3s in your music folder. Please do not delete the currently playing track! If you need to delete it from the client while the server is running, upload another song and wait for it to finish playing.
 
 As for uploading... I'm working on implementing some visual cues for the process but when you upload, **wait for your file to populate the mp3 list.** That's a sure sign that it's been fully uploaded to the server.
 
 ## Scheduling
 
-The scheduling is a bit limited, I'll admit. Node is going to read the music folder files in alphanumerical order, so before you upload the "first" song in the schedule, prepend it with a 01, like `01-your-first-song.mp3` and then prepend the second with 02 `02-your-second-song` etc etc. That's all I got for a workaround right now.
+The scheduling is a bit limited, I'll admit. Node is going to read the music folder files in alphanumerical order, so before you upload the "first" song in the schedule, prepend it with a 01, like `01-your-first-song.mp3` and then prepend the second with 02 `02-your-second-song` 
 
 ## Thank you!
