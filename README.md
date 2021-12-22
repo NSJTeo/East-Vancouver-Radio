@@ -44,6 +44,6 @@ As for uploading... I'm working on implementing some visual cues for the process
 
 ## Scheduling
 
-The scheduling is a bit limited, I'll admit. Node is going to read the music folder files in alphanumerical order, so before you upload the "first" song in the schedule, prepend it with a 01, like `01-your-first-song.mp3` and then prepend the second with 02 `02-your-second-song` 
+The scheduling is a bit limited, I'll admit. Node is going to read the music folder files in alphanumerical order, so before you upload the "first" song in the schedule, prepend it with a 01, like `01-your-first-song.mp3` and then prepend the second with 02 like `02-your-second-song.mp3` 
 
 ## Thank you!
